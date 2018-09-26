@@ -23,10 +23,18 @@ class Card():
 
 
     def __int__(self):
-        try:
+        if self.figure in range(2,11):
             return int(self.figure)
-        except:
-            if self.figure in ['J', 'Q', 'K']:
-                return 10
-            if self.figure == 'A':
-                return 11
+        if self.figure == 'J':
+            return 11
+        if self.figure == 'Q':
+            return 12
+        if self.figure == 'K':
+            return 13
+        if self.figure == 'A':
+            return 14
+
+    def __gt__(self, other):
+        if isinstance(other, Card):
+            return int(self) > int(other)
+        return NotImplemented

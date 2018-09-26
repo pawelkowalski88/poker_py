@@ -1,5 +1,8 @@
 #Player class
 from card import Card
+from hand import Hand
+from table import Table
+
 class Player():
 
     def __init__(self, name):
