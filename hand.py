@@ -14,7 +14,7 @@ class Hand():
 
     def pair(self):
         all_cards = self.cards + self.cards_on_table
-        card_count = Counter(map(lambda: c: int(c), all_cards))
+        card_count = Counter(map(lambda c: int(c), all_cards))
         for c, n in card_count.items():
             print(str(c) + " " + str(n))
 
