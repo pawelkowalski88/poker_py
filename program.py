@@ -17,14 +17,23 @@ for i in [2,3,4,5,6,7,8,9,"J","Q","K","A"]:
         carddeck.append(Card(i, c))
 
 table = []
-hand = Hand(table)
+hand1 = Hand(table)
+hand2 = Hand(table)
 
 table.append(pick_a_card(carddeck))
 table.append(pick_a_card(carddeck))
 table.append(pick_a_card(carddeck))
 
-hand.cards.append(pick_a_card(carddeck))
-hand.cards.append(pick_a_card(carddeck))
+hand1.cards.append(pick_a_card(carddeck))
+hand1.cards.append(pick_a_card(carddeck))
+hand2.cards.append(pick_a_card(carddeck))
+hand2.cards.append(pick_a_card(carddeck))
 
-print(hand.print_cards())
-print(list(map(lambda h: str(h.hand_name) + ' ' + str(h.value), hand.find_hands())))
+print()
+print("Hand 1")
+print(hand1.print_cards())
+print(list(map(lambda h: str(h.hand_name) + ' ' + str(h.value), hand1.find_hands())))
+print()
+print("Hand 2")
+print(hand2.print_cards())
+print(list(map(lambda h: str(h.hand_name) + ' ' + str(h.value), hand2.find_hands())))
