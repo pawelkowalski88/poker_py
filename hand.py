@@ -9,6 +9,7 @@ class Hand():
         self.cards_on_table = cards_on_table
 
     def print_cards(self):
+        print("Cards:")
         result = ""
         for c in self.cards+self.cards_on_table:
             result += str(c)
@@ -31,9 +32,6 @@ class Hand():
 
         if "Pair" in hand_name_list and "Three of a kind" in hand_name_list:
                 hands.append(HandDescription('Full house', None, None))
-
-        for n in hand_name_list:
-            print(n)
 
         if "Flush" in hand_name_list and 'Straight' in hand_name_list:
                 hands.append(HandDescription('Straight flush', None, None))
@@ -73,14 +71,14 @@ class Hand():
 
 
 
-table = [Card(10, '♠'), Card(6, '♠'), Card(7, '♠')]
-hand = Hand(table)
-hand.cards.append(Card(8, '♠'))
-hand.cards.append(Card(9, '♠'))
+# table = [Card(10, '♠'), Card(6, '♠'), Card(7, '♠')]
+# hand = Hand(table)
+# hand.cards.append(Card(8, '♠'))
+# hand.cards.append(Card(9, '♠'))
 
-print(hand.print_cards())
+# print(hand.print_cards())
 
-print(list(map(lambda h: str(h.hand_name) + ' ' + str(h.value), hand.find_hands())))
+# print(list(map(lambda h: str(h.hand_name) + ' ' + str(h.value), hand.find_hands())))
 
 
 
