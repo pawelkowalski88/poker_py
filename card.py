@@ -33,8 +33,25 @@ class Card():
             return 13
         if self.figure == 'A':
             return 14
+        return ValueError
+
 
     def __gt__(self, other):
         if isinstance(other, Card):
             return int(self) > int(other)
         return NotImplemented
+
+    def __eq__(self, other):
+        if isinstance(other, Card):
+            return int(self) == int(other)
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(self.figure)
+
+    def print_value(self):
+        if self.figure == 10:
+            return 'X'
+        else:
+            return str(self.figure)
+        
