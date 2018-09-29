@@ -7,28 +7,15 @@ class Player():
 
     def __init__(self, name):
         self.name = name
-        self.score = 0
-        self.cards = []
+        self.balance = 0
+        self.cards = Hand(None)
 
-#napisac test
-    def calculate_score(self):
-        self.score = 0
-        for c in self.cards:
-            if not c.covered:
-                if int(c) == 11:
-                    if self.score > 10:
-                        self.score += 1
-                    else:
-                        self.score += 11
-                else:
-                    self.score += int(c)
-    
-    def reveal_cards(self):
-        for c in self.cards:
-            c.covered = False
+    def add_card(self, card):
+        self.cards.cards.append(card)
+
+    def find_hands(self):
+        self.cards.find_hands()
+        self.cards.sort_my_hands()
 
     def print_cards(self):
-        result = ''
-        for c in self.cards:
-            result += str(c)
-        return result
+        return self.cards.print_cards(False)
