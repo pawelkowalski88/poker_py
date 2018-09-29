@@ -7,36 +7,40 @@ class Hand():
     def __init__(self, cards_on_table):
         self.cards = []
         self.cards_on_table = cards_on_table
+        self.hands_list = []
 
-    def print_cards(self):
+    def print_cards(self, all=True):
         print("Cards:")
         result = ""
-        for c in self.cards+self.cards_on_table:
+        cards = self.cards
+        if all:
+            cards += self.cards_on_table
+        for c in cards:
             result += str(c)
         return result
 
     def find_hands(self):
-        hands = []
+        # hands = []
         all_cards = (self.cards+self.cards_on_table)
 
-        self.pairs_threes_fours(hands, all_cards)
-        self.find_flush(hands,all_cards)
-        self.find_straight(hands, all_cards)
+        self.pairs_threes_fours(self.hands_list, all_cards)
+        self.find_flush(self.hands_list,all_cards)
+        self.find_straight(self.hands_list, all_cards)
 
-        hand_name_list = list(map(lambda h: h.hand_name, hands))
+        hand_name_list = list(map(lambda h: h.hand_name, self.hands_list))
 
         hands_count = Counter(hand_name_list)
         for key, value in hands_count.items():
             if value==2 and key=='Pair':
-                hands.append(HandDescription('Two pairs', None, None))
+                self.hands_list.append(HandDescription('Two pairs', None, None))
 
         if "Pair" in hand_name_list and "Three of a kind" in hand_name_list:
-                hands.append(HandDescription('Full house', None, None))
+                self.hands_list.append(HandDescription('Full house', None, None))
 
         if "Flush" in hand_name_list and 'Straight' in hand_name_list:
-                hands.append(HandDescription('Straight flush', None, None))
+                self.hands_list.append(HandDescription('Pokier', None, None))
 
-        return hands
+        #return hands
 
     def pairs_threes_fours(self, hands_list, cards_list):
         card_counts = Counter(map(lambda c: c.figure, cards_list))
@@ -52,7 +56,7 @@ class Hand():
 
     def find_flush(self, hands_list, cards_list):
         card_color_counts = Counter(map(lambda c: c.color, cards_list))
-        for key,value in card_color_counts.items():
+        for value in card_color_counts.values():
             if value == 5:
                 hands_list.append(HandDescription('Flush', None, None))
 
@@ -67,6 +71,9 @@ class Hand():
             previous = v
         else:
             hands_list.append(HandDescription('Straight', card_values[0], None))
+
+    def sort_my_hands(self):
+        self.hands_list.sort()
 
 
 

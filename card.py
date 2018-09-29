@@ -3,6 +3,19 @@ from colorama import Fore,Back, Style, init
 
 init(convert=True)
 
+def card_to_int(val):
+    if val in range(2,11):
+        return int(val)
+    if val == 'J':
+        return 11
+    if val == 'Q':
+        return 12
+    if val == 'K':
+        return 13
+    if val == 'A':
+        return 14
+    return ValueError
+
 class Card():
 
     def __init__(self, figure, color):
@@ -23,17 +36,7 @@ class Card():
 
 
     def __int__(self):
-        if self.figure in range(2,11):
-            return int(self.figure)
-        if self.figure == 'J':
-            return 11
-        if self.figure == 'Q':
-            return 12
-        if self.figure == 'K':
-            return 13
-        if self.figure == 'A':
-            return 14
-        return ValueError
+        return card_to_int(self.figure)
 
 
     def __gt__(self, other):
