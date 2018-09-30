@@ -40,6 +40,7 @@ class Hand():
         if "Flush" in hand_name_list and 'Straight' in hand_name_list:
                 self.hands_list.append(HandDescription('Pokier', None, None))
 
+        self.sort_my_hands()
         #return hands
 
     def pairs_threes_fours(self, hands_list, cards_list):
@@ -72,9 +73,15 @@ class Hand():
         else:
             hands_list.append(HandDescription('Straight', card_values[0], None))
 
-    def sort_my_hands(self):
-        self.hands_list.sort()
+    def as_values(self):
+        return [x for x in map(lambda h: h.as_values(), self.hands_list)]
 
+    def sort_my_hands(self):
+        self.hands_list.sort(reverse=True)
+
+    def __gt__(self, other):
+        if isinstance(other, Hand):
+            return self.hands_list > other.hands_list
 
 
 

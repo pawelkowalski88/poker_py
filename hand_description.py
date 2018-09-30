@@ -18,11 +18,26 @@ class HandDescription():
         self.value = value
         self.returned_cards = returned_cards
 
-    def __lt__(self, other):
+    def __gt__(self, other):
         if isinstance(other, HandDescription):
             if hand_ranking[self.hand_name] == hand_ranking[other.hand_name]:
                 if not self.value or not other.value:
                     return False 
-                return card_to_int(self.value) < card_to_int(other.value)
-            return hand_ranking[self.hand_name] < hand_ranking[other.hand_name]
+                return card_to_int(self.value) > card_to_int(other.value)
+            return hand_ranking[self.hand_name] > hand_ranking[other.hand_name]
         return NotImplemented
+
+    def __eq__(self, other):
+        if isinstance(other, HandDescription):
+            if hand_ranking[self.hand_name] == hand_ranking[other.hand_name]:
+                if not self.value and not other.value:
+                    return True
+                if not self.value or not other.value:
+                    return False
+                return card_to_int(self.value) == card_to_int(other.value)
+            return False
+        return NotImplemented
+    
+    def as_values(self):
+        return [hand_ranking[self.hand_name], self.value]
+                

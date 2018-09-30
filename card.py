@@ -5,6 +5,7 @@ init(convert=True)
 
 def card_to_int(val):
     if val in range(2,11):
+        
         return int(val)
     if val == 'J':
         return 11

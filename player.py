@@ -19,3 +19,9 @@ class Player():
 
     def print_cards(self):
         return self.cards.print_cards(False)
+
+    def __gt__(self,other):
+        if isinstance(other, Player):
+            return self.cards > other.cards
+
+    
