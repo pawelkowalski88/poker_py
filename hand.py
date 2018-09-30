@@ -10,7 +10,7 @@ class Hand():
         self.hands_list = []
 
     def print_cards(self, all=True):
-        print("Cards:")
+        # print("Cards:")
         result = ""
         cards = self.cards
         if all:
