@@ -50,26 +50,26 @@ def create_results_ranking(players_tab):
     for p in players_tab:
         p.find_hands()
 
+def print_results(players_tab):
+    players_tab.sort(reverse=True)
+    players_ranking = groupby(players_tab, key=lambda x: x.cards.as_values())
+    for group, players in players_ranking:
+        for p in players:
+            print(p.name)
+            print(p.cards.as_values())
+            print(p.print_cards())
+        print()
+    print(list(map(lambda p: p.name, players_tab)))
+
+
 carddeck = generate_deck()
-players_table = create_default_players(4)
+players_table = create_default_players(6)
 deal_cards_to_players(players_table)
 
 add_new_card_to_table(table)
 add_new_card_to_table(table)
 add_new_card_to_table(table)
-
+create_results_ranking(players_table)
 
 print_table(table)
-
-players_table.sort(reverse=True)
-players_ranking = groupby(players_table, key=lambda x: x.cards.as_values())
-for group, players in players_ranking:
-    for p in players:
-        print(p.name)
-        print(p.cards.as_values())
-        print(p.print_cards())
-    print()
-
-players_table.sort(reverse=True)
-
-print(list(map(lambda p: p.name, players_table)))
+print_results(players_table)
