@@ -48,9 +48,9 @@ class Game():
             p.add_card(self.pick_a_card())
 
     def create_default_players(self, number_of_players):
-        player_tab = []
-        player_tab = [Player("Player " + str(i+1)) for i in range(number_of_players)]
-        return player_tab
+        players_tab = []
+        players_tab = [Player("Player " + str(i+1)) for i in range(number_of_players)]
+        return players_tab
 
     def add_new_card_to_table(self):
         self.table.append(self.pick_a_card())
