@@ -18,3 +18,7 @@ while True:
 print("\n")
 print("!!!ROZPOCZYNAMY GRE!!!")
 print("\n")
+
+while not game_service.game.finished:
+    print(game_service.perform_action("Get state", None))
+    game_service.perform_action("Next move", None)

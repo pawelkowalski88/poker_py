@@ -11,9 +11,12 @@ class GameService():
         "Get players": self.get_players,
         "Get player": self.get_player,
         "Start game": self.start_game,
-        "Next move": self.next_palyer,
+        "Next move": self.next_player,
         "Get state": self.get_game_state
         }
+
+    def perform_action(self, action_name, action_params):
+        return self.game_actions[action_name](action_params)
 
     def get_table(self):
         return self.game.print_table()
@@ -26,18 +29,17 @@ class GameService():
 
     def start_game(self, params):
         self.game.deal_cards_to_players()
+        self.game.get_next_player()
 
     def get_player(self, params):
         self.game.get_player(params["player name"])
 
-    def next_palyer(self, params):
+    def next_player(self, params):
         current_player = self.game.get_next_player()
         if not current_player:
             self.game.reset_round()
             current_player = self.game.get_next_player()
-
-    def perform_action(self, action_name, action_params):
-        return self.game_actions[action_name](action_params)
+        return current_player
 
     def get_game_state(self, params):
         table = self.game.table
@@ -55,7 +57,7 @@ class GameService():
     def check_game(self):
         return self.game.finished
     
-    def get_next_player(self):
+    def get_current_player(self):
         return self.game.get_current_player()
 
 
@@ -63,8 +65,10 @@ class GameService():
 game_service = GameService()
 game_service.perform_action("Add player", {"player name": "Pawel"})
 game_service.perform_action("Add player", {"player name": "Karolina"})
+game_service.perform_action("Add player", {"player name": "Tyna"})
 game_service.perform_action("Start game", None)
-#game_service.game.deal_cards_to_players()
-for p in game_service.perform_action("Get players", None).values():
-    print(p)
+
+while not game_service.game.finished:
+    print(game_service.perform_action("Get state", None))
+    game_service.perform_action("Next move", None)
     
