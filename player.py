@@ -9,6 +9,7 @@ class Player():
         self.name = name
         self.balance = 0
         self.cards = Hand(None)
+        self.bet = 0
 
     def add_card(self, card):
         self.cards.cards.append(card)
@@ -16,6 +17,11 @@ class Player():
     def find_hands(self):
         self.cards.find_hands()
         self.cards.sort_my_hands()
+
+    def place_bet(self, amount):
+        if self.balance >= amount:
+            self.bet = amount
+            self.balance -= amount
 
     def print_cards(self):
         return self.cards.print_cards(False)
