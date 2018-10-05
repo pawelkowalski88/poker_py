@@ -11,7 +11,8 @@ class GameService():
         "Get players": self.get_players,
         "Get player": self.get_player,
         "Start game": self.start_game,
-        "Next move": self.next_palyer
+        "Next move": self.next_palyer,
+        "Get state": self.get_game_state
         }
 
     def get_table(self):
@@ -38,7 +39,7 @@ class GameService():
     def perform_action(self, action_name, action_params):
         return self.game_actions[action_name](action_params)
 
-    def get_game_state(self):
+    def get_game_state(self, params):
         table = self.game.table
         players = self.game.players
         current_player = self.game.get_current_player()
@@ -50,14 +51,6 @@ class GameService():
         }
 
         return game_state
-
-    def print_game_state(self):
-        game_state = self.get_game_state()
-        table = game_state["table"]
-
-        print()
-        print("Table:")
-
 
     def check_game(self):
         return self.game.finished
