@@ -9,27 +9,31 @@ class GameService():
         self.game_actions={
         "Add player": self.add_player,
         "Get players": self.get_players,
-        "Get player": self.get_player
+        "Get player": self.get_player,
+        "Start game": self.start_game,
+        "Next move": self.next_palyer
         }
-
-    def init_steps(self):
-        for p in self.game.players:
-            pass
 
     def get_table(self):
         return self.game.print_table()
 
-    def get_players(self):
+    def get_players(self, params):
         return self.game.players
 
     def add_player(self, params):
         self.game.add_player(params["player name"])
 
-    def start_game(self):
+    def start_game(self, params):
         self.game.deal_cards_to_players()
 
     def get_player(self, params):
         self.game.get_player(params["player name"])
+
+    def next_palyer(self, params):
+        current_player = self.game.get_next_player()
+        if not current_player:
+            self.game.reset_round()
+            current_player = self.game.get_next_player()
 
     def perform_action(self, action_name, action_params):
         return self.game_actions[action_name](action_params)
@@ -47,6 +51,14 @@ class GameService():
 
         return game_state
 
+    def print_game_state(self):
+        game_state = self.get_game_state()
+        table = game_state["table"]
+
+        print()
+        print("Table:")
+
+
     def check_game(self):
         return self.game.finished
     
@@ -58,4 +70,8 @@ class GameService():
 game_service = GameService()
 game_service.perform_action("Add player", {"player name": "Pawel"})
 game_service.perform_action("Add player", {"player name": "Karolina"})
-print(game_service.get_players())
+game_service.perform_action("Start game", None)
+#game_service.game.deal_cards_to_players()
+for p in game_service.perform_action("Get players", None).values():
+    print(p)
+    
