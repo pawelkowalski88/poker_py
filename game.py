@@ -2,6 +2,7 @@ from card import Card
 from hand import Hand
 from hand_description import HandDescription
 from player import Player
+from game_action import GameAction
 from itertools import groupby
 import random
 
@@ -10,8 +11,10 @@ class Game():
     def __init__(self):
         self.table = []
         self.players = {}
+        self.players_gen = self.players_generator()
         self.carddeck = self.generate_deck()
         self.finished = False
+        self.current_player = None
 
     def pick_a_card(self):
         card = self.carddeck[random.randint(0,len(self.carddeck)-1)]
@@ -53,9 +56,10 @@ class Game():
         return players_tab
 
     def add_new_card_to_table(self):
-        self.table.append(self.pick_a_card())
         if len(self.table)>2:
             self.finished = True
+            return
+        self.table.append(self.pick_a_card())
 
     def create_results_ranking(self, players_tab):
         for p in players_tab:
@@ -71,3 +75,23 @@ class Game():
                 print(p.print_cards())
             print()
         print(list(map(lambda p: p.name, players_tab)))
+
+    def players_generator(self):
+        for p in self.players:
+            yield p
+
+    def get_current_player(self):
+        return self.current_player
+
+    def get_next_player(self):
+        if self.finished:
+            return None
+        try:
+            self.current_player = next(self.players_gen)
+            return self.current_player
+        except:
+            return None
+
+    def reset_round(self):
+        self.players_gen=self.players_generator()
+        self.add_new_card_to_table()
