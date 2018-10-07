@@ -45,13 +45,13 @@ class GameService():
         table = self.game.table
         players = self.game.players
         current_player = self.game.get_current_player()
-
+        round_no = self.game.round_no
         game_state={
             "Table": table,
             "Players": players,
-            "Current player": current_player
+            "Current player": current_player,
+            "Round no": round_no
         }
-
         return game_state
 
     def check_game(self):
@@ -62,13 +62,13 @@ class GameService():
 
 
 
-game_service = GameService()
-game_service.perform_action("Add player", {"player name": "Pawel"})
-game_service.perform_action("Add player", {"player name": "Karolina"})
-game_service.perform_action("Add player", {"player name": "Tyna"})
-game_service.perform_action("Start game", None)
+# game_service = GameService()
+# game_service.perform_action("Add player", {"player name": "Pawel"})
+# game_service.perform_action("Add player", {"player name": "Karolina"})
+# game_service.perform_action("Add player", {"player name": "Tyna"})
+# game_service.perform_action("Start game", None)
 
-while not game_service.game.finished:
-    print(game_service.perform_action("Get state", None))
-    game_service.perform_action("Next move", None)
+# while not game_service.game.finished:
+#     print(game_service.perform_action("Get state", None))
+#     game_service.perform_action("Next move", None)
     
