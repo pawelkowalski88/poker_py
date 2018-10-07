@@ -2,6 +2,8 @@ from game_service import GameService
 
 def print_game_state(game_service):
     game_state = game_service.perform_action("Get state", None)
+    print()
+    print()
     table = game_state["Table"]
     players = game_state["Players"]
     cur_player = game_state["Current player"]
@@ -14,7 +16,7 @@ def print_game_state(game_service):
         print("No cards on the table")
     if players:
         print("Players in game:")
-        for p in players.keys():
+        for p in players:
             print(p)
     else:
         print("No players in game")
@@ -41,6 +43,8 @@ print("\n")
 print("!!!ROZPOCZYNAMY GRE!!!")
 print("\n")
 
+
+game_service.perform_action("Start game", None)
 while not game_service.game.finished:
-    print(game_service.perform_action("Get state", None))
+    print_game_state(game_service)
     game_service.perform_action("Next move", None)
