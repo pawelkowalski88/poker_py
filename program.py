@@ -1,5 +1,27 @@
 from game_service import GameService
 
+def print_game_state(game_service):
+    game_state = game_service.perform_action("Get state", None)
+    table = game_state["Table"]
+    players = game_state["Players"]
+    cur_player = game_state["Current player"]
+    if table:
+        print("Cards on the table:")
+        card_str = []
+        card_str = [c.__str__() for c in table]
+        print("".join(card_str))
+    else:
+        print("No cards on the table")
+    if players:
+        print("Players in game:")
+        for p in players.keys():
+            print(p)
+    else:
+        print("No players in game")
+    if cur_player:
+        print("It is your turn, " + str(cur_player))
+    
+
 
 game_service = GameService()
 
