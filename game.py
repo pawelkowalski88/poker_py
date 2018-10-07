@@ -39,22 +39,21 @@ class Game():
 
     def generate_deck(self):
         carddeck = []
-        for i in [2,3,4,5,6,7,8,9,"J","Q","K","A"]:
-            for c in ['♠', '♣', '♥', '♦']:
-                carddeck.append(Card(i, c))
+        figures = [2,3,4,5,6,7,8,9,"J","Q","K","A"]
+        colors = ['♠', '♣', '♥', '♦']
+        carddeck = [Card(f, c) for f in figures for c in colors]
         return carddeck
 
     def deal_cards_to_players(self):
-        for k, p in self.players.items():
+        for p in self.players.values():
             p.cards = Hand(self.table)
             p.add_card(self.pick_a_card())
             p.add_card(self.pick_a_card())
 
     def create_default_players(self, number_of_players):
-        player_tab = []
-        for i in range(number_of_players):  
-            player_tab.append(Player("Player " + str(i+1)))
-        return player_tab
+        players_tab = []
+        players_tab = [Player("Player " + str(i+1)) for i in range(number_of_players)]
+        return players_tab
 
     def add_new_card_to_table(self):
         if len(self.table)>2:
