@@ -16,7 +16,9 @@ class GameService():
         }
 
     def perform_action(self, action_name, action_params):
-        return self.game_actions[action_name](action_params)
+        result = self.game_actions[action_name](action_params)
+        print(self.game.check_betting_fished())
+        return result
 
     def get_table(self):
         return self.game.print_table()
@@ -35,9 +37,15 @@ class GameService():
         self.game.get_player(params["player name"])
 
     def next_player(self, params):
+        if params['Action name'] == 'Bet':
+            self.game.current_player.place_bet(int(params['Amount']))
+        if self.game.check_betting_fished():
+            self.game.reset_round()
+            current_player = self.game.get_next_player()
+            return current_player
         current_player = self.game.get_next_player()
         if not current_player:
-            self.game.reset_round()
+            self.game.new_loop()
             current_player = self.game.get_next_player()
         return current_player
 
@@ -45,13 +53,13 @@ class GameService():
         table = self.game.table
         players = self.game.players
         current_player = self.game.get_current_player()
-
+        round_no = self.game.round_no
         game_state={
             "Table": table,
             "Players": players,
-            "Current player": current_player
+            "Current player": current_player,
+            "Round no": round_no
         }
-
         return game_state
 
     def check_game(self):
@@ -62,13 +70,13 @@ class GameService():
 
 
 
-game_service = GameService()
-game_service.perform_action("Add player", {"player name": "Pawel"})
-game_service.perform_action("Add player", {"player name": "Karolina"})
-game_service.perform_action("Add player", {"player name": "Tyna"})
-game_service.perform_action("Start game", None)
+# game_service = GameService()
+# game_service.perform_action("Add player", {"player name": "Pawel"})
+# game_service.perform_action("Add player", {"player name": "Karolina"})
+# game_service.perform_action("Add player", {"player name": "Tyna"})
+# game_service.perform_action("Start game", None)
 
-while not game_service.game.finished:
-    print(game_service.perform_action("Get state", None))
-    game_service.perform_action("Next move", None)
+# while not game_service.game.finished:
+#     print(game_service.perform_action("Get state", None))
+#     game_service.perform_action("Next move", None)
     
