@@ -89,8 +89,11 @@ class Game():
         except:
             return None
 
-    def reset_round(self):
+    def new_loop(self):
         self.players_gen=self.players_generator()
+
+    def reset_round(self):
+        self.new_loop()
         self.round_no += 1
         self.add_new_card_to_table()
 
