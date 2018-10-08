@@ -46,7 +46,7 @@ print("\n")
 
 game_service.perform_action("Start game", None)
 while not game_service.game.finished:
-    print(game_service.perform_action("Get state", None))
+    print_game_state(game_service)
     choice = input("C - check, B - bet, F - fold ")
     action_params = {'Action name': ""}
     if choice.lower() == 'b':
