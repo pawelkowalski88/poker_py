@@ -21,4 +21,9 @@ print("\n")
 
 while not game_service.game.finished:
     print(game_service.perform_action("Get state", None))
-    game_service.perform_action("Next move", None)
+    choice = input("C - check, B - bet, F - fold ")
+    action_params = {'Action name': ""}
+    if choice.lower() == 'b':
+        amount = input("What amount?")
+        action_params = {'Action name': 'Bet', 'Amount': amount}
+    game_service.perform_action("Next move", action_params)

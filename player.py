@@ -7,7 +7,7 @@ class Player():
 
     def __init__(self, name):
         self.name = name
-        self.balance = 0
+        self.balance = 5000
         self.cards = Hand(None)
         self.bet = 0
         self.bet_placed = False
@@ -25,6 +25,7 @@ class Player():
         if self.balance >= amount:
             self.bet = amount
             self.balance -= amount
+            self.bet_placed = True
 
     def print_cards(self):
         return self.cards.print_cards(False)
