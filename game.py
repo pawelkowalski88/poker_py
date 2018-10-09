@@ -16,6 +16,23 @@ class Game():
         self.finished = False
         self.current_player = None
         self.round_no = 0
+        self.game_results = []
+
+    def player_action(self, params):
+        if params['Action name'] == 'Bet':
+            self.current_player.place_bet(int(params['Amount']))
+        self.check_game_state()
+
+    def check_game_state(self):
+        if self.check_betting_fished():
+            self.reset_round()
+            self.current_player = self.get_next_player()
+            return
+        self.current_player = self.get_next_player()
+        if not self.current_player:
+            self.new_loop()
+            self.current_player = self.get_next_player()
+            return
 
     def pick_a_card(self):
         card = self.carddeck[random.randint(0,len(self.carddeck)-1)]
@@ -40,7 +57,7 @@ class Game():
 
     def generate_deck(self):
         carddeck = []
-        figures = [2,3,4,5,6,7,8,9,"J","Q","K","A"]
+        figures = [2,3,4,5,6,7,8,9,10,"J","Q","K","A"]
         colors = ['♠', '♣', '♥', '♦']
         carddeck = [Card(f, c) for f in figures for c in colors]
         return carddeck
@@ -69,18 +86,6 @@ class Game():
         if self.round_no > 1:
             self.table.append(self.pick_a_card())
 
-    def player_action(self, params):
-        if params['Action name'] == 'Bet':
-            self.current_player.place_bet(int(params['Amount']))
-        if self.check_betting_fished():
-            self.reset_round()
-            self.current_player = self.get_next_player()
-            return
-        if not self.current_player:
-            self.new_loop()
-            self.current_player = self.get_next_player()
-            return
-
     def create_results_ranking(self, players_tab):
         for p in players_tab:
             p.find_hands()
@@ -108,6 +113,8 @@ class Game():
         self.new_loop()
         self.round_no += 1
         self.add_new_card_to_table()
+        for p in self.players:
+            p.bet = 0
 
     def check_betting_fished(self):
         max_bet = max(map(lambda p: p.bet, self.players))
@@ -116,16 +123,19 @@ class Game():
                 continue
             if p.bet != max_bet or not p.bet_placed:
                 return False
-            
         return True
 
-    # def print_results(self, players_tab):
-    #     players_tab.sort(reverse=True)
-    #     players_ranking = groupby(players_tab, key=lambda x: x.cards.as_values())
-    #     for group, players in players_ranking:
-    #         for p in players:
-    #             print(p.name)
-    #             print(p.cards.as_values())
-    #             print(p.print_cards())
-    #         print()
-    #     print(list(map(lambda p: p.name, players_tab)))
+    def get_game_results(self):
+        for p in self.players:
+            p.find_hands()
+        self.players.sort(reverse=True)
+        players_ranking = groupby(self.players, key=lambda x: x.cards.as_values())
+        for group, players in players_ranking:
+            for p in players:
+                self.game_results.append({"Name": p.name,
+                "Hands": list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
+                "Cards": p.print_cards(),
+                "Best hand": p.cards.hands_list[0].as_name_and_value()})
+
+        return self.game_results
+        #print(list(map(lambda p: p.name, players_tab)))
