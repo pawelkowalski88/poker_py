@@ -69,6 +69,18 @@ class Game():
         if self.round_no > 1:
             self.table.append(self.pick_a_card())
 
+    def player_action(self, params):
+        if params['Action name'] == 'Bet':
+            self.current_player.place_bet(int(params['Amount']))
+        if self.check_betting_fished():
+            self.reset_round()
+            self.current_player = self.get_next_player()
+            return
+        if not self.current_player:
+            self.new_loop()
+            self.current_player = self.get_next_player()
+            return
+
     def create_results_ranking(self, players_tab):
         for p in players_tab:
             p.find_hands()
