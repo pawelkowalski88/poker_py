@@ -64,6 +64,6 @@ while not game_service.game.finished:
 print_game_state(game_service)
 
 for r in game_service.game.get_game_results():
-    print(r["Name"] + " " + r["Best hand"][0])
+    print(r["Name"] + " " + r["Best hand"][0] + " " + r["Best hand"][1])
     # for h in r["Hands"]:
     #     print(h)
