@@ -28,8 +28,7 @@ class GameService():
         self.game.add_player(params["player name"])
 
     def start_game(self, params):
-        self.game.deal_cards_to_players()
-        self.game.get_next_player()
+        self.game.initialize_game()
 
     def get_player(self, params):
         self.game.get_player(params["player name"])
@@ -51,11 +50,11 @@ class GameService():
         }
         return game_state
 
-    def check_game(self):
-        return self.game.finished
+    # def check_game(self):
+    #     return self.game.finished
     
-    def get_current_player(self):
-        return self.game.get_current_player()
+    # def get_current_player(self):
+    #     return self.game.get_current_player()
 
 
 

@@ -34,6 +34,10 @@ class Game():
             self.current_player = self.get_next_player()
             return
 
+    def initialize_game(self):
+        self.deal_cards_to_players()
+        self.check_game_state()
+
     def pick_a_card(self):
         card = self.carddeck[random.randint(0,len(self.carddeck)-1)]
         while card.taken == True:
