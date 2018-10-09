@@ -119,6 +119,7 @@ class Game():
         self.add_new_card_to_table()
         for p in self.players:
             p.bet = 0
+            p.bet_placed = False
 
     def check_betting_fished(self):
         max_bet = max(map(lambda p: p.bet, self.players))

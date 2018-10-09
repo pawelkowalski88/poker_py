@@ -23,7 +23,7 @@ class Player():
 
     def place_bet(self, amount):
         if self.balance >= amount:
-            self.bet = amount
+            self.bet += amount
             self.balance -= amount
             self.bet_placed = True
 
