@@ -35,6 +35,6 @@ class Player():
             return self.cards > other.cards
 
     def __str__(self):
-        return self.name + " " + str(self.balance) + " " + self.print_cards()
+        return self.name + " " + str(self.balance) + " " + self.print_cards() + " bet: " + str(self.bet)
 
     

@@ -14,18 +14,25 @@ def print_game_state(game_service):
         print("".join(card_str))
     else:
         print("No cards on the table")
+    print()
     if players:
         print("Players in game:")
         for p in players:
             print(p)
     else:
         print("No players in game")
+    print()
     if cur_player:
-        print("It is your turn, " + str(cur_player))
+        print("It is your turn, " + str(cur_player.name))
+    print()
     
 
 
 game_service = GameService()
+
+
+game_service.perform_action("Add player", {"player name": "Pawel"})
+game_service.perform_action("Add player", {"player name": "Karolina"})
 
 while True:
     print("P - nowy gracz")
@@ -47,9 +54,16 @@ print("\n")
 game_service.perform_action("Start game", None)
 while not game_service.game.finished:
     print_game_state(game_service)
-    choice = input("C - check, B - bet, F - fold ")
-    action_params = {'Action name': ""}
-    if choice.lower() == 'b':
-        amount = input("What amount?")
-        action_params = {'Action name': 'Bet', 'Amount': amount}
-    game_service.perform_action("Next move", action_params)
+    #choice = input("C - check, B - bet, F - fold ")
+    #action_params = {'Action name': ""}
+    #if choice.lower() == 'b':
+        #amount = input("What amount?")
+        #action_params = {'Action name': 'Bet', 'Amount': amount}
+    game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
+
+print_game_state(game_service)
+
+for r in game_service.game.get_game_results():
+    print(r["Name"] + " " + r["Best hand"][0])
+    # for h in r["Hands"]:
+    #     print(h)
