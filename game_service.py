@@ -18,9 +18,6 @@ class GameService():
     def perform_action(self, action_name, action_params):
         return self.game_actions[action_name](action_params)
 
-    def get_table(self):
-        return self.game.print_table()
-
     def get_players(self, params):
         return self.game.players
 
