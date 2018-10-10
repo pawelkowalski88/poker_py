@@ -28,10 +28,15 @@ class Player():
             self.bet_placed = True
 
     def fold(self):
-        pass
+        self.folded = True
 
-    def call(self, amount):
-        pass
+    def call(self, max_bet):
+        bet_diff = max_bet - self.bet
+        if self.balance >= bet_diff:
+            self.place_bet(bet_diff)
+        else:
+            self.place_bet(self.balance)
+
 
     def check(self):
         self.bet_placed = True

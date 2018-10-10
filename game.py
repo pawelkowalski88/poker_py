@@ -21,11 +21,15 @@ class Game():
         self.game_results = []
         self.small_blind = 5
         self.big_bling = 10
+        self.max_bet = 0
 
 
     def player_action(self, params):
         if params['Action name'] == 'Bet':
             self.current_player.place_bet(int(params['Amount']))
+        if params['Action name'] == 'Call':
+            print(params)
+            self.current_player.call(int(params['Max bet']))
         self.check_game_state()
 
     def check_game_state(self):
@@ -47,6 +51,7 @@ class Game():
         
     def check_betting_fished(self):
         max_bet = max(map(lambda p: p.bet, self.players))
+        self.max_bet = max_bet
         for p in self.players:
             if not p.active or p.folded:
                 continue
@@ -106,6 +111,7 @@ class Game():
     def reset_round(self):
         self.new_loop()
         self.round_no += 1
+        self.max_bet = 0
         if self.round_no > 3:
             self.finished = True
         self.dealer.add_new_card_to_table(self.round_no)
