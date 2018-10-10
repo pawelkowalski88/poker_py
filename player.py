@@ -23,7 +23,7 @@ class Player():
 
     def place_bet(self, amount):
         if self.balance >= amount:
-            self.bet = amount
+            self.bet += amount
             self.balance -= amount
             self.bet_placed = True
 
@@ -35,6 +35,6 @@ class Player():
             return self.cards > other.cards
 
     def __str__(self):
-        return self.name + " " + str(self.balance) + " " + self.print_cards()
+        return self.name + " " + str(self.balance) + " " + self.print_cards() + " bet: " + str(self.bet)
 
     

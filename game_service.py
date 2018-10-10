@@ -11,17 +11,12 @@ class GameService():
         "Get players": self.get_players,
         "Get player": self.get_player,
         "Start game": self.start_game,
-        "Next move": self.next_player,
+        "Player action": self.player_action,
         "Get state": self.get_game_state
         }
 
     def perform_action(self, action_name, action_params):
-        result = self.game_actions[action_name](action_params)
-        print(self.game.check_betting_fished())
-        return result
-
-    def get_table(self):
-        return self.game.print_table()
+        return self.game_actions[action_name](action_params)
 
     def get_players(self, params):
         return self.game.players
@@ -30,43 +25,33 @@ class GameService():
         self.game.add_player(params["player name"])
 
     def start_game(self, params):
-        self.game.deal_cards_to_players()
-        self.game.get_next_player()
+        self.game.initialize_game()
 
     def get_player(self, params):
         self.game.get_player(params["player name"])
 
-    def next_player(self, params):
-        if params['Action name'] == 'Bet':
-            self.game.current_player.place_bet(int(params['Amount']))
-        if self.game.check_betting_fished():
-            self.game.reset_round()
-            current_player = self.game.get_next_player()
-            return current_player
-        current_player = self.game.get_next_player()
-        if not current_player:
-            self.game.new_loop()
-            current_player = self.game.get_next_player()
-        return current_player
+    def player_action(self, params):
+        self.game.player_action(params)
+        self.get_game_state(None)
 
     def get_game_state(self, params):
         table = self.game.table
         players = self.game.players
-        current_player = self.game.get_current_player()
+        self.current_player = self.game.get_current_player()
         round_no = self.game.round_no
         game_state={
             "Table": table,
             "Players": players,
-            "Current player": current_player,
+            "Current player": self.current_player,
             "Round no": round_no
         }
         return game_state
 
-    def check_game(self):
-        return self.game.finished
+    # def check_game(self):
+    #     return self.game.finished
     
-    def get_current_player(self):
-        return self.game.get_current_player()
+    # def get_current_player(self):
+    #     return self.game.get_current_player()
 
 
 

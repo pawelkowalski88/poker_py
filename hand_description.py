@@ -40,4 +40,10 @@ class HandDescription():
     
     def as_values(self):
         return [hand_ranking[self.hand_name], self.value]
+
+    def as_name_and_value(self):
+        if self.value:
+            return [self.hand_name, str(self.value)]
+        return [self.hand_name, ""]
+
                 
