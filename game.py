@@ -19,6 +19,8 @@ class Game():
         self.current_player = None
         self.round_no = 0
         self.game_results = []
+        self.small_blind = 5
+        self.big_bling = 10
 
 
     def player_action(self, params):

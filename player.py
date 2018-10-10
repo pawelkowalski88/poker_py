@@ -27,6 +27,18 @@ class Player():
             self.balance -= amount
             self.bet_placed = True
 
+    def fold(self):
+        pass
+
+    def call(self, amount):
+        pass
+
+    def check(self):
+        self.bet_placed = True
+
+    def raise_bet(self, amount):
+        pass
+
     def print_cards(self):
         return self.cards.print_cards(False)
 

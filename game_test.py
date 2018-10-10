@@ -4,7 +4,8 @@ from player import Player
 
 class TestGame(unittest.TestCase):
 
-    def test_check_betting_fished_all_200(self):
+    def test_check_betting_fished_all_200_true(self):
+        #Arrange
         game = Game()
         game.add_player(Player("Pawel"))
         game.add_player(Player("Karolina"))
@@ -13,8 +14,10 @@ class TestGame(unittest.TestCase):
         game.players[0].bet_placed = True
         game.players[1].bet_placed = True
 
+        #Act(?)
         result = game.check_betting_fished()
 
+        #Assert
         self.assertEqual(result, True)
 
     def test_check_betting_fished_false(self):
