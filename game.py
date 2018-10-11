@@ -28,8 +28,9 @@ class Game():
         if params['Action name'] == 'Bet':
             self.current_player.place_bet(int(params['Amount']))
         if params['Action name'] == 'Call':
-            print(params)
-            self.current_player.call(int(params['Max bet']))
+            self.current_player.call(params['Max bet'])
+        if params['Action name'] == 'Raise':
+            self.current_player.raise_bet(params['Max bet'], int(params['Amount']))
         self.check_game_state()
 
     def check_game_state(self):
