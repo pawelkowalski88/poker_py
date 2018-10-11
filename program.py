@@ -62,6 +62,8 @@ while not game_service.game.finished:
     if choice.lower() == 'c':
         max_bet = game_service.game.max_bet
         action_params = {'Action name': 'Call', 'Max bet': max_bet}
+    if choice.lower() == 'f':
+        action_params = {'Action name': 'Fold'}
     #game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
     game_service.perform_action("Player action", action_params)
 

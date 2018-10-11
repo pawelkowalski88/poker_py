@@ -30,20 +30,24 @@ class Game():
         if params['Action name'] == 'Call':
             print(params)
             self.current_player.call(int(params['Max bet']))
+        if params['Action name'] == 'Fold':
+            self.current_player.fold()
         self.check_game_state()
 
     def check_game_state(self):
+        if self.check_number_of_players_left() == 1:
+            self.finished = True
+            return
         if self.check_betting_fished():
             self.reset_round()
-            self.current_player = self.get_next_player()         
-            print("Game finished: " + str(self.finished))
+            self.current_player = self.get_next_player()   
             return
         self.current_player = self.get_next_player()
-        if not self.current_player:
-            self.new_loop()
+        while not (self.current_player and not self.current_player.folded):
+            if not self.current_player:
+                self.new_loop()
             self.current_player = self.get_next_player()
-            return
-
+        return
 
     def initialize_game(self):
         self.dealer.deal_cards_to_players(self.players)
@@ -58,6 +62,11 @@ class Game():
             if p.bet != max_bet or not p.bet_placed:
                 return False
         return True
+
+    def check_number_of_players_left(self):
+
+        result = len(list(filter(lambda p: p.folded == False and p.active == True, self.players)))
+        return result
 
     def get_game_results(self):
         for p in self.players:
