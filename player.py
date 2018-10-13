@@ -41,8 +41,13 @@ class Player():
     def check(self):
         self.bet_placed = True
 
-    def raise_bet(self, amount):
-        pass
+    def raise_bet(self, max_bet, raise_amount):
+        bet_diff = max_bet - self.bet
+        self.call(max_bet)
+        self.place_bet(raise_amount)
+        if bet_diff >0:
+            print('I see your {} and I raise you {}'.format(str(bet_diff), str(raise_amount)))
+        
 
     def print_cards(self):
         return self.cards.print_cards(False)

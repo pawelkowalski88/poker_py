@@ -54,7 +54,7 @@ print("\n")
 game_service.perform_action("Start game", None)
 while not game_service.game.finished:
     print_game_state(game_service)
-    choice = input("C - call, B - bet, F - fold ")
+    choice = input("C - call, B - bet, F - fold, R - raise")
     action_params = {'Action name': ""}
     if choice.lower() == 'b':
         amount = input("What amount?")
@@ -64,6 +64,10 @@ while not game_service.game.finished:
         action_params = {'Action name': 'Call', 'Max bet': max_bet}
     if choice.lower() == 'f':
         action_params = {'Action name': 'Fold'}
+    if choice.lower() == 'r':
+        max_bet = game_service.game.max_bet
+        amount = input("What amount to raise?")
+        action_params = {'Action name': 'Raise', 'Max bet': max_bet, 'Amount': amount}
     #game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
     game_service.perform_action("Player action", action_params)
 
