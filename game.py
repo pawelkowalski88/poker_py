@@ -32,7 +32,7 @@ class Game():
         if params['Action name'] == 'Fold':
             self.current_player.fold()
         if params['Action name'] == 'Raise':
-            self.current_player.raise_bet(params['Max bet'], int(params['Amount']))
+            self.current_player.raise_bet(int(params['Amount']))
         self.check_game_state()
 
     def check_game_state(self):

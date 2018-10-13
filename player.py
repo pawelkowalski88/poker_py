@@ -13,6 +13,7 @@ class Player():
         self.bet_placed = False
         self.active = True
         self.folded = False
+        self.all_in_state = False
 
     def add_card(self, card):
         self.cards.cards.append(card)
@@ -34,20 +35,20 @@ class Player():
         bet_diff = max_bet - self.bet
         if self.balance >= bet_diff:
             self.place_bet(bet_diff)
-        else:
+    
+    def all_in(self):
+        if self.balance > 0:
             self.place_bet(self.balance)
+        else:
+            self.check()
+        self.all_in_state = True
 
 
     def check(self):
         self.bet_placed = True
 
-    def raise_bet(self, max_bet, raise_amount):
-        bet_diff = max_bet - self.bet
-        self.call(max_bet)
-        self.place_bet(raise_amount)
-        if bet_diff >0:
-            print('I see your {} and I raise you {}'.format(str(bet_diff), str(raise_amount)))
-        
+    def raise_bet(self, raise_amount):
+        self.place_bet(raise_amount)        
 
     def print_cards(self):
         return self.cards.print_cards(False)
