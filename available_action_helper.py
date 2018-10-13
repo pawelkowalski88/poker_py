@@ -50,6 +50,5 @@ def get_available_actions(players, current_player):
         PlayerAction("All in", "A", all_in_available)
     ]
     return list(filter(lambda pa: pa.func(players, current_player), player_actions))
-    return list(map(lambda pa: {"Name": pa.name, "Key": pa.key}, result))
 
 

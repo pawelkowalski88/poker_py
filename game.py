@@ -54,7 +54,7 @@ class Game():
 
         self.current_player = self.get_next_player()
 
-        while not (self.current_player and not self.current_player.folded):
+        while not (self.current_player and not self.current_player.folded and not self.current_player.all_in_state):
             if not self.current_player:
                 self.new_loop()
             self.current_player = self.get_next_player()
