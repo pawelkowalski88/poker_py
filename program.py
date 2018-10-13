@@ -1,7 +1,9 @@
 from game_service import GameService
 
-def print_game_state(game_service):
-    game_state = game_service.perform_action("Get state", None)
+def get_game_state(game_service):
+    return game_service.perform_action("Get state", None)
+
+def print_game_state(game_state):
     print()
     print()
     table = game_state["Table"]
@@ -25,14 +27,22 @@ def print_game_state(game_service):
     if cur_player:
         print("It is your turn, " + str(cur_player.name))
     print()
+
+
+def print_player_actions(player_actions):
+    result = ""
+    for a in player_actions:
+        result += a.name + " - " + a.key + " "
+
+    return result
     
-
-
 game_service = GameService()
 
 
 game_service.perform_action("Add player", {"player name": "Pawel"})
 game_service.perform_action("Add player", {"player name": "Karolina"})
+
+game_service.game.players[0].balance = 3000
 
 while True:
     print("P - nowy gracz")
@@ -53,8 +63,10 @@ print("\n")
 
 game_service.perform_action("Start game", None)
 while not game_service.game.finished:
-    print_game_state(game_service)
-    choice = input("C - call, B - bet, F - fold, R - raise")
+    game_state = get_game_state(game_service)
+    print_game_state(game_state)
+    #choice = input("C - call, B - bet, F - fold, R - raise")
+    choice = input(print_player_actions(game_state["Available actions"]))
     action_params = {'Action name': ""}
     if choice.lower() == 'b':
         amount = input("What amount?")
@@ -66,11 +78,13 @@ while not game_service.game.finished:
         action_params = {'Action name': 'Fold'}
     if choice.lower() == 'r':
         amount = input("What amount to raise?")
-        action_params = {'Action name': 'Raise', 'Amount': amount}
+        action_params = {'Action name': 'Raise', 'Amount': amount}    
+    if choice.lower() == 'a':
+        action_params = {'Action name': 'All in'}
     #game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
     game_service.perform_action("Player action", action_params)
 
-print_game_state(game_service)
+print_game_state(get_game_state(game_service))
 
 for r in game_service.game.get_game_results():
     print(r["Name"] + " " + r["Best hand"][0] + " " + r["Best hand"][1])

@@ -49,16 +49,7 @@ def get_available_actions(players, current_player):
         PlayerAction("Call", "C", call_available),
         PlayerAction("All in", "A", all_in_available)
     ]
-    result = list(filter(lambda pa: pa.func(players, current_player), player_actions))
-    return result
+    return list(filter(lambda pa: pa.func(players, current_player), player_actions))
+    return list(map(lambda pa: {"Name": pa.name, "Key": pa.key}, result))
 
-players = []
-players.append(Player("Pawel"))
-players.append(Player("Karolina"))
-
-players[0].bet = 0
-players[1].bet = 5000
-players[0].balance = 1200
-
-print(list(map(lambda pa: pa.name + " - " + pa.key, get_available_actions(players, players[0]))))
 

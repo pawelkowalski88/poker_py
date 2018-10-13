@@ -6,6 +6,7 @@ from collections import Counter
 from itertools import groupby
 from table import Table
 from dealer import Dealer
+import available_action_helper
 import random
 
 class Game():
@@ -33,22 +34,37 @@ class Game():
             self.current_player.fold()
         if params['Action name'] == 'Raise':
             self.current_player.raise_bet(int(params['Amount']))
+        if params['Action name'] == 'All in':
+            self.current_player.all_in()
         self.check_game_state()
 
     def check_game_state(self):
         if self.check_number_of_players_left() == 1:
             self.finished = True
             return
+
         if self.check_betting_fished():
             self.reset_round()
+            while self.check_betting_fished():
+                self.reset_round()
+                if self.finished:
+                    return
             self.current_player = self.get_next_player()   
             return
+
         self.current_player = self.get_next_player()
+
         while not (self.current_player and not self.current_player.folded):
             if not self.current_player:
                 self.new_loop()
             self.current_player = self.get_next_player()
+
         return
+
+    def get_current_available_actions(self):
+        if self.current_player:
+            return available_action_helper.get_available_actions(self.players, self.current_player)
+        return None
 
     def initialize_game(self):
         self.dealer.deal_cards_to_players(self.players)
@@ -57,15 +73,19 @@ class Game():
     def check_betting_fished(self):
         max_bet = max(map(lambda p: p.bet, self.players))
         self.max_bet = max_bet
+
+        if len(list(filter(lambda p: not p.all_in_state, self.players))) < 2:
+            return len(list(filter(lambda p: not p.all_in_state, self.players)))
+
         for p in self.players:
-            if not p.active or p.folded:
+            if not p.active or p.folded or p.all_in_state:
                 continue
             if p.bet != max_bet or not p.bet_placed:
                 return False
+
         return True
 
     def check_number_of_players_left(self):
-
         result = len(list(filter(lambda p: p.folded == False and p.active == True, self.players)))
         return result
 

@@ -39,10 +39,12 @@ class GameService():
         players = self.game.players
         self.current_player = self.game.get_current_player()
         round_no = self.game.round_no
+        available_actions = self.game.get_current_available_actions()
         game_state={
             "Table": table,
             "Players": players,
             "Current player": self.current_player,
+            "Available actions": available_actions,
             "Round no": round_no
         }
         return game_state
