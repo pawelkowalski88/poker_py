@@ -55,12 +55,12 @@ class Game():
                 self.reset_round()
                 if self.finished:
                     return
-            self.current_player = self.get_next_player()   
-            return
 
         self.current_player = self.get_next_player()
 
-        while not (self.current_player and not self.current_player.folded):
+        while not (self.current_player and not self.current_player.folded and not self.current_player.all_in_state):
+            if self.finished:
+                return
             if not self.current_player:
                 self.new_loop()
             self.current_player = self.get_next_player()
