@@ -29,6 +29,18 @@ class TestClass(unittest.TestCase):
 
         self.assertEqual(game.current_player.name, game.players[2].name)
 
+    def test_bypass_next_player(self):
+        game = Game()
+        game.add_player("Pawel")
+        game.add_player("Karolina")
+        game.add_player("Tyna")
+
+        game.check_game_state()
+
+        game.check_game_state()
+
+        self.assertEqual(game.current_player.name, game.players[1].name)
+
 
 if __name__ == '__main__':
     unittest.main()
