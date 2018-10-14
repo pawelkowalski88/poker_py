@@ -26,17 +26,23 @@ class Game():
 
 
     def player_action(self, params):
+        result = ''
         if params['Action name'] == 'Bet':
-            self.current_player.place_bet(int(params['Amount']))
+            result = self.current_player.place_bet(int(params['Amount']))
         if params['Action name'] == 'Call':
-            self.current_player.call(int(params['Max bet']))
+            result = self.current_player.call(int(params['Max bet']))
         if params['Action name'] == 'Fold':
-            self.current_player.fold()
+            result = self.current_player.fold()
         if params['Action name'] == 'Raise':
-            self.current_player.raise_bet(int(params['Amount']))
+            result = self.current_player.raise_bet(int(params['Amount']))
         if params['Action name'] == 'All in':
-            self.current_player.all_in()
-        self.check_game_state()
+            result = self.current_player.all_in()
+        
+        if result['result'] == 'OK':
+            self.check_game_state()
+            return {'action_result': 'OK'}
+        else:
+            return {'action_result': 'ERROR'}
 
     def check_game_state(self):
         if self.check_number_of_players_left() == 1:
