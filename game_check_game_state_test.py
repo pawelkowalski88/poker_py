@@ -9,9 +9,8 @@ class TestClass(unittest.TestCase):
         game.add_player("Pawel")
         game.add_player("Karolina")
         game.add_player("Tyna")
-
+        game.check_game_state()
         game.players[1].all_in_state = True
-        game.current_player = game.players[0]
 
         game.check_game_state()
 
@@ -23,7 +22,7 @@ class TestClass(unittest.TestCase):
         game.add_player("Karolina")
         game.add_player("Tyna")
 
-        game.current_player = game.players[0]
+        game.check_game_state()
         game.players[1].folded = True
 
         game.check_game_state()
