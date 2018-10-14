@@ -74,16 +74,18 @@ if __name__ == '__main__':
         if choice.lower() == 'b':
             amount = input("What amount?")
             action_params = {'Action name': 'Bet', 'Amount': amount}
-        if choice.lower() == 'c':
+        elif choice.lower() == 'c':
             max_bet = game_service.game.max_bet
             action_params = {'Action name': 'Call', 'Max bet': max_bet}
-        if choice.lower() == 'f':
+        elif choice.lower() == 'f':
             action_params = {'Action name': 'Fold'}
-        if choice.lower() == 'r':
+        elif choice.lower() == 'r':
             amount = input("What amount to raise?")
             action_params = {'Action name': 'Raise', 'Amount': amount}    
-        if choice.lower() == 'a':
+        elif choice.lower() == 'a':
             action_params = {'Action name': 'All in'}
+        else:
+            continue
         #game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
         result = game_service.perform_action("Player action", action_params)
         if result['result'] == 'ERROR':
