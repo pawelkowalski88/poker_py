@@ -21,7 +21,8 @@ class Game():
         self.round_no = 0
         self.game_results = []
         self.small_blind = 5
-        self.big_bling = 10
+        self.big_blind = 10
+        self.pot = 0
         self.max_bet = 0
 
 
