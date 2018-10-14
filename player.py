@@ -27,25 +27,35 @@ class Player():
             self.bet += amount
             self.balance -= amount
             self.bet_placed = True
+            return {'result': 'OK'}
+        else:
+            return {'result': 'ERROR', 'error_message': 'UPS, not enough funds to bet'}
 
     def fold(self):
         self.folded = True
+        return {'result': 'OK'}
 
     def call(self, max_bet):
         bet_diff = max_bet - self.bet
         if self.balance >= bet_diff:
             self.place_bet(bet_diff)
+            return {'result': 'OK'}
+        else:
+            return {'result': 'ERROR', 'error_message': 'UPS, not enough funds to call, go all in instead'}
+    
     
     def all_in(self):
         if self.balance > 0:
             self.place_bet(self.balance)
+            self.all_in_state = True
+            return {'result': 'OK'}
         else:
-            self.check()
-        self.all_in_state = True
+            return {'result': 'ERROR', 'error_message': 'UPS, not enough funds to bet'}
 
 
     def check(self):
         self.bet_placed = True
+        return {'result': 'OK'}
 
     def raise_bet(self, raise_amount):
         self.place_bet(raise_amount)        
