@@ -41,9 +41,7 @@ class Game():
         
         if result['result'] == 'OK':
             self.check_game_state()
-            return {'action_result': 'OK'}
-        else:
-            return {'action_result': 'ERROR'}
+        return result
 
     def check_game_state(self):
         if self.check_number_of_players_left() == 1:
@@ -153,5 +151,6 @@ class Game():
             self.finished = True
         self.dealer.add_new_card_to_table(self.round_no)
         for p in self.players:
+            self.pot += p.bet
             p.bet = 0
             p.bet_placed = False

@@ -17,6 +17,7 @@ def print_game_state(game_state):
     else:
         print("No cards on the table")
     print()
+    print("Pot: " + str(game_state["Pot"]))
     if players:
         print("Players in game:")
         for p in players:
@@ -85,7 +86,8 @@ if __name__ == '__main__':
             action_params = {'Action name': 'All in'}
         #game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
         result = game_service.perform_action("Player action", action_params)
-        print(result)
+        if result['result'] == 'ERROR':
+            print("ERROR: " + result['error_message'])
 
     print_game_state(get_game_state(game_service))
 

@@ -58,7 +58,7 @@ class Player():
         return {'result': 'OK'}
 
     def raise_bet(self, raise_amount):
-        self.place_bet(raise_amount)        
+        return self.place_bet(raise_amount)        
 
     def print_cards(self):
         return self.cards.print_cards(False)

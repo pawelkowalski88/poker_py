@@ -32,8 +32,9 @@ class GameService():
         self.game.get_player(params["player name"])
 
     def player_action(self, params):
-        self.game.player_action(params)
+        result = self.game.player_action(params)
         self.get_game_state(None)
+        return result
 
     def get_game_state(self, params):
         table = self.game.table
@@ -41,12 +42,14 @@ class GameService():
         self.current_player = self.game.get_current_player()
         round_no = self.game.round_no
         available_actions = self.game.get_current_available_actions()
+        pot = self.game.pot
         game_state={
             "Table": table,
             "Players": players,
             "Current player": self.current_player,
             "Available actions": available_actions,
-            "Round no": round_no
+            "Round no": round_no,
+            "Pot": pot
         }
         return game_state
 
