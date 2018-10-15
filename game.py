@@ -24,9 +24,14 @@ class Game():
         self.big_blind = 10
         self.pot = 0
         self.max_bet = 0
+        self.started = False
+        self.game_results = None
 
 
     def player_action(self, params):
+        if not self.current_player.ready and not params['Action name'] == 'Confirm ready':
+            return {'result': 'ERROR', 'error_message': 'The game has not yet started'}
+
         result = ''
         if params['Action name'] == 'Bet':
             result = self.current_player.place_bet(int(params['Amount']))
@@ -37,15 +42,19 @@ class Game():
         if params['Action name'] == 'Raise':
             result = self.current_player.raise_bet(int(params['Amount']))
         if params['Action name'] == 'All in':
-            result = self.current_player.all_in()
-        
+            result = self.current_player.all_in()        
+        if params['Action name'] == 'Confirm ready':
+            self.current_player.ready = True
+            result['result'] = 'OK'
+
         if result['result'] == 'OK':
             self.check_game_state()
         return result
 
     def check_game_state(self):
+
         if self.check_number_of_players_left() == 1:
-            self.finished = True
+            self.finish_game()
             return
 
         if self.check_betting_fished():
@@ -74,6 +83,22 @@ class Game():
     def initialize_game(self):
         self.dealer.deal_cards_to_players(self.players)
         self.check_game_state()
+
+    def finish_game(self):
+        self.finished = True
+        for p in self.players:
+            self.pot += p.bet
+            p.bet = 0
+        results_groups  = self.check_game_results()
+        self.game_results = []
+        for key, group in results_groups:
+            self.game_results.append(list(group))
+        winner = self.game_results[0][0]
+        print(winner.name)
+        winner.balance += self.pot
+        self.pot = 0
+        
+
         
     def check_betting_fished(self):
         max_bet = max(map(lambda p: p.bet, self.players))
@@ -94,18 +119,31 @@ class Game():
         result = len(list(filter(lambda p: p.folded == False and p.active == True, self.players)))
         return result
 
-    def get_game_results(self):
+    def check_game_results(self):
         for p in self.players:
             p.find_hands()
-        self.players.sort(reverse=True)
-        players_ranking = groupby(self.players, key=lambda x: x.cards.as_values())
-        for group, players in players_ranking:
-            for p in players:
-                self.game_results.append({"Name": p.name,
+
+        players_finished = list(filter(lambda p: p.active and not p.folded, self.players))
+        players_finished.sort(reverse=True)
+        return groupby(players_finished, key=lambda x: x.cards.as_values())
+
+    def get_game_results(self):
+        players_ranking = self.game_results
+        result = []
+        # for group, players in players_ranking:
+        #     for p in players:
+        #         result.append({"Name": p.name,
+        #         "Hands": list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
+        #         "Cards": p.print_cards(),
+        #         "Best hand": p.cards.hands_list[0].as_name_and_value()})
+
+        for group in players_ranking:
+            for p in group:
+                result.append({"Name": p.name,
                 "Hands": list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
                 "Cards": p.print_cards(),
-                "Best hand": p.cards.hands_list[0].as_name_and_value()})
-        return self.game_results
+                "Best hand": p.cards.hands_list[0].as_name_and_value()})    
+        return result
 
     def create_results_ranking(self, players_tab):
         for p in players_tab:
@@ -148,7 +186,7 @@ class Game():
         self.round_no += 1
         self.max_bet = 0
         if self.round_no > 3:
-            self.finished = True
+            self.finish_game()
         self.dealer.add_new_card_to_table(self.round_no)
         for p in self.players:
             self.pot += p.bet

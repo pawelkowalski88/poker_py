@@ -14,6 +14,7 @@ class Player():
         self.active = True
         self.folded = False
         self.all_in_state = False
+        self.ready = True
 
     def add_card(self, card):
         self.cards.cards.append(card)

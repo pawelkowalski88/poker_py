@@ -84,6 +84,8 @@ if __name__ == '__main__':
             action_params = {'Action name': 'Raise', 'Amount': amount}    
         elif choice.lower() == 'a':
             action_params = {'Action name': 'All in'}
+        elif choice.lower() == 'y':
+            action_params = {'Action name': 'Confirm ready'}
         else:
             continue
         #game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
