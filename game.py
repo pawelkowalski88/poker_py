@@ -46,24 +46,28 @@ class Game():
             result = self.current_player.all_in()        
         if params['Action name'] == 'Confirm ready':
             result = self.set_player_ready()
-            self.current_player.ready = True
             
 
         if result['result'] == 'OK':
             self.check_game_state()
+            if self.round_finished:
+                self.finish_round()
+                self.initialize_round()
+                self.round_finished = False
         return result
 
     def check_game_state(self):
 
         if self.check_number_of_players_left() == 1:
-            self.finish_game()
+            self.round_finished = True
             return
 
         if self.check_betting_fished():
-            self.reset_round()
+            self.reset_betting_round()
+            #goes through all the round till the end in case there is one player still betting (the rest either folded or went all-in)
             while self.check_betting_fished():
-                self.reset_round()
-                if self.finished:
+                self.reset_betting_round()
+                if self.finished or self.round_finished:
                     return
 
         self.current_player = self.get_next_player()
@@ -84,22 +88,21 @@ class Game():
 
     def set_player_ready(self):
         self.current_player.ready = True
-        if all(map(lambda p: p.ready, self.players)):
-            self.round_finished = False
-            self.initialize_game()
+        # if all(map(lambda p: p.ready, self.players)):
+        #     self.round_finished = False
         return {'result':'OK'}
 
     
 
-    def initialize_game(self):
+    def initialize_round(self):
         self.dealer.collect_cards(self.players)
         self.table.clear()
         self.dealer.deal_cards_to_players(self.players)
         self.round_no = 0
+        self.players_gen = self.players_generator()
         self.check_game_state()
 
-    def finish_game(self):
-        #self.finished = True
+    def finish_round(self):
         for p in self.players:
             self.pot += p.bet
             p.bet = 0
@@ -111,8 +114,7 @@ class Game():
         winner = self.game_results[0][0]
         print(winner.name)
         winner.balance += self.pot
-        self.pot = 0
-        
+        self.pot = 0        
 
         
     def check_betting_fished(self):
@@ -189,12 +191,13 @@ class Game():
     def new_loop(self):
         self.players_gen=self.players_generator()
 
-    def reset_round(self):
+    def reset_betting_round(self):
         self.new_loop()
         self.round_no += 1
         self.max_bet = 0
         if self.round_no > 3:
-            self.finish_game()
+            self.round_finished = True
+            return
         self.dealer.add_new_card_to_table(self.round_no)
         for p in self.players:
             self.pot += p.bet

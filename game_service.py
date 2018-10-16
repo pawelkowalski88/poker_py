@@ -26,7 +26,7 @@ class GameService():
         self.game.add_player(params["player name"])
 
     def start_game(self, params):
-        self.game.initialize_game()
+        self.game.initialize_round()
 
     def get_player(self, params):
         self.game.get_player(params["player name"])

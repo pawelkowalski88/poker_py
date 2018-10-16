@@ -71,7 +71,7 @@ class Player():
         self.active = True
         self.folded = False
         self.all_in_state = False
-        self.ready = True
+        self.ready = False
 
     def __gt__(self,other):
         if isinstance(other, Player):
