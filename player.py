@@ -64,6 +64,15 @@ class Player():
     def print_cards(self):
         return self.cards.print_cards(False)
 
+    def reset_player(self):
+        self.cards = Hand(None)
+        self.bet = 0
+        self.bet_placed = False
+        self.active = True
+        self.folded = False
+        self.all_in_state = False
+        self.ready = True
+
     def __gt__(self,other):
         if isinstance(other, Player):
             return self.cards > other.cards

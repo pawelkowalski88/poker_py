@@ -26,13 +26,14 @@ class Game():
         self.max_bet = 0
         self.started = False
         self.game_results = None
+        self.round_finished = False
 
 
     def player_action(self, params):
         if not self.current_player.ready and not params['Action name'] == 'Confirm ready':
             return {'result': 'ERROR', 'error_message': 'The game has not yet started'}
 
-        result = ''
+        result = {}
         if params['Action name'] == 'Bet':
             result = self.current_player.place_bet(int(params['Amount']))
         if params['Action name'] == 'Call':
@@ -44,8 +45,9 @@ class Game():
         if params['Action name'] == 'All in':
             result = self.current_player.all_in()        
         if params['Action name'] == 'Confirm ready':
+            result = self.set_player_ready()
             self.current_player.ready = True
-            result['result'] = 'OK'
+            
 
         if result['result'] == 'OK':
             self.check_game_state()
@@ -80,15 +82,28 @@ class Game():
             return available_action_helper.get_available_actions(self.players, self.current_player)
         return None
 
+    def set_player_ready(self):
+        self.current_player.ready = True
+        if all(map(lambda p: p.ready, self.players)):
+            self.round_finished = False
+            self.initialize_game()
+        return {'result':'OK'}
+
+    
+
     def initialize_game(self):
+        self.dealer.collect_cards(self.players)
+        self.table.clear()
         self.dealer.deal_cards_to_players(self.players)
+        self.round_no = 0
         self.check_game_state()
 
     def finish_game(self):
-        self.finished = True
+        #self.finished = True
         for p in self.players:
             self.pot += p.bet
             p.bet = 0
+            p.ready = False
         results_groups  = self.check_game_results()
         self.game_results = []
         for key, group in results_groups:
@@ -130,13 +145,6 @@ class Game():
     def get_game_results(self):
         players_ranking = self.game_results
         result = []
-        # for group, players in players_ranking:
-        #     for p in players:
-        #         result.append({"Name": p.name,
-        #         "Hands": list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
-        #         "Cards": p.print_cards(),
-        #         "Best hand": p.cards.hands_list[0].as_name_and_value()})
-
         for group in players_ranking:
             for p in group:
                 result.append({"Name": p.name,
