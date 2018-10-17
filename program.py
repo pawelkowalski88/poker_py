@@ -68,28 +68,28 @@ if __name__ == '__main__':
     while not game_service.game.finished:
         game_state = get_game_state(game_service)
         print_game_state(game_state)
-        #choice = input("C - call, B - bet, F - fold, R - raise")
-        choice = input(print_player_actions(game_state["Available actions"]))
-        action_params = {'Action name': ""}
-        if choice.lower() == 'b':
-            amount = input("What amount?")
-            action_params = {'Action name': 'Bet', 'Amount': amount}
-        elif choice.lower() == 'c':
-            max_bet = game_service.game.max_bet
-            action_params = {'Action name': 'Call', 'Max bet': max_bet}
-        elif choice.lower() == 'f':
-            action_params = {'Action name': 'Fold'}
-        elif choice.lower() == 'r':
-            amount = input("What amount to raise?")
-            action_params = {'Action name': 'Raise', 'Amount': amount}    
-        elif choice.lower() == 'a':
-            action_params = {'Action name': 'All in'}
-        elif choice.lower() == 'y':
-            action_params = {'Action name': 'Confirm ready'}
-        else:
-            continue
+        command = input(print_player_actions(game_state["Available actions"]))
+
+        # action_params = {'Action name': ""}
+        # if choice.lower() == 'b':
+        #     amount = input("What amount?")
+        #     action_params = {'Action name': 'Bet', 'Amount': amount}
+        # elif choice.lower() == 'c':
+        #     max_bet = game_service.game.max_bet
+        #     action_params = {'Action name': 'Call', 'Max bet': max_bet}
+        # elif choice.lower() == 'f':
+        #     action_params = {'Action name': 'Fold'}
+        # elif choice.lower() == 'r':
+        #     amount = input("What amount to raise?")
+        #     action_params = {'Action name': 'Raise', 'Amount': amount}    
+        # elif choice.lower() == 'a':
+        #     action_params = {'Action name': 'All in'}
+        # elif choice.lower() == 'y':
+        #     action_params = {'Action name': 'Confirm ready'}
+        # else:
+        #     continue
         #game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
-        result = game_service.perform_action("Player action", action_params)
+        result = game_service.perform_action("Player action", command)
         if result['result'] == 'ERROR':
             print("ERROR: " + result['error_message'])
 

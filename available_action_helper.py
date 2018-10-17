@@ -50,23 +50,35 @@ def confirm_ready_available(players, current_player):
         return True
     return False
 
-class PlayerAction():
+class PlayerActionAvailability():
 
-    def __init__(self, name, key, func):
+    def __init__(self, name, key, func, has_value):
         self.name = name
         self.key = key
         self.func = func
+        self.has_value = has_value
+
+    def to_player_action(self):
+        return PlayerAction(self.name, self.key, self.has_value)
+
+class PlayerAction():
+    def __init__(self, name, key, has_value):
+        self.name = name
+        self.key = key
+        self.has_value = has_value
+
 
 def get_available_actions(players, current_player):
     player_actions = [
-        PlayerAction("Check", "C", check_available),
-        PlayerAction("Fold", "F", fold_available),
-        PlayerAction("Bet", "B", bet_available),
-        PlayerAction("Raise", "R", raise_available),
-        PlayerAction("Call", "C", call_available),
-        PlayerAction("All in", "A", all_in_available),
-        PlayerAction("Confirm ready", "Y", confirm_ready_available)
+        PlayerActionAvailability("Check", "C", check_available, False),
+        PlayerActionAvailability("Fold", "F", fold_available, False),
+        PlayerActionAvailability("Bet", "B", bet_available, True),
+        PlayerActionAvailability("Raise", "R", raise_available, True),
+        PlayerActionAvailability("Call", "C", call_available, False),
+        PlayerActionAvailability("All in", "A", all_in_available, False),
+        PlayerActionAvailability("Confirm ready", "Y", confirm_ready_available, False)
     ]
-    return list(filter(lambda pa: pa.func(players, current_player), player_actions))
+    return list(map(lambda p: p.to_player_action(), filter(lambda pa: pa.func(players, current_player), player_actions)))
+
 
 

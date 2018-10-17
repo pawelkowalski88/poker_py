@@ -35,13 +35,13 @@ class Game():
 
         result = {}
         if params['Action name'] == 'Bet':
-            result = self.current_player.place_bet(int(params['Amount']))
+            result = self.current_player.place_bet(int(params['Value']))
         if params['Action name'] == 'Call':
-            result = self.current_player.call(int(params['Max bet']))
+            result = self.current_player.call(self.max_bet)
         if params['Action name'] == 'Fold':
             result = self.current_player.fold()
         if params['Action name'] == 'Raise':
-            result = self.current_player.raise_bet(int(params['Amount']))
+            result = self.current_player.raise_bet(int(params['Value']))
         if params['Action name'] == 'All in':
             result = self.current_player.all_in()        
         if params['Action name'] == 'Confirm ready':

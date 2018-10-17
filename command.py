@@ -1,0 +1,46 @@
+from available_action_helper import PlayerAction
+
+class CommandParser():
+
+    def __init__(self, available_commands):
+        self.available_commands = available_commands
+
+    def parse_and_exetute(self, command: str, function):
+        elements = command.split(' ')
+
+        try:
+            cmd = next(filter(lambda a: a.key.lower() == elements[0], self.available_commands))
+        except (StopIteration):
+            return {"result": "Error", "Message": "No such command!"}
+
+        if cmd.has_value:
+            if len(elements) > 1:
+                value = elements[1]
+            else:
+                return {"result": "Error", "Message": f"The {cmd.name} command needs a parameter!"}
+        else:
+            if len(elements) > 1:
+                return {"result": "Error", "Message": f"Too many parameters for {cmd.name} command!"}
+            else:
+                value = None
+        
+        return function({"Action name": cmd.name, "Value": value})
+
+
+    def execute(self, params):
+        print(f"Name: {params['Action name']}, Value: {params['Value']}")
+        return {"result": "OK"}
+
+player_actions = [
+    PlayerAction("Check", "C", False),
+    PlayerAction("Fold", "F", False),
+    PlayerAction("Bet", "B", True),
+    PlayerAction("Raise", "R", True),
+    PlayerAction("Call", "C", True),
+    PlayerAction("All in", "A", False),
+    PlayerAction("Confirm ready", "Y", False)
+]
+cmd = CommandParser(player_actions)
+
+result = cmd.parse_and_exetute("b 100", cmd.execute)
+print(result)
