@@ -24,6 +24,10 @@ class Dealer():
             p.add_card(self.pick_a_card())
             p.add_card(self.pick_a_card())
 
+    def collect_cards(self, players):
+        for p in players:
+            p.reset_player()
+
     def pick_a_card(self):
         card = self.carddeck[random.randint(0,len(self.carddeck)-1)]
         while card.taken == True:
