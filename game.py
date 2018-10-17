@@ -38,6 +38,8 @@ class Game():
             result = self.current_player.place_bet(int(params['Value']))
         if params['Action name'] == 'Call':
             result = self.current_player.call(self.max_bet)
+        if params['Action name'] == 'Check':
+            result = self.current_player.check()
         if params['Action name'] == 'Fold':
             result = self.current_player.fold()
         if params['Action name'] == 'Raise':

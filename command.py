@@ -11,16 +11,16 @@ class CommandParser():
         try:
             cmd = next(filter(lambda a: a.key.lower() == elements[0], self.available_commands))
         except (StopIteration):
-            return {"result": "Error", "Message": "No such command!"}
+            return {"result": "ERROR", "error_message": "No such command!"}
 
         if cmd.has_value:
             if len(elements) > 1:
                 value = elements[1]
             else:
-                return {"result": "Error", "Message": f"The {cmd.name} command needs a parameter!"}
+                return {"result": "ERROR", "error_message": f"The {cmd.name} command needs a parameter!"}
         else:
             if len(elements) > 1:
-                return {"result": "Error", "Message": f"Too many parameters for {cmd.name} command!"}
+                return {"result": "ERROR", "error_message": f"Too many parameters for {cmd.name} command!"}
             else:
                 value = None
         

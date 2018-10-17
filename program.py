@@ -68,7 +68,8 @@ if __name__ == '__main__':
     while not game_service.game.finished:
         game_state = get_game_state(game_service)
         print_game_state(game_state)
-        command = input(print_player_actions(game_state["Available actions"]))
+        while True:
+            command = input(print_player_actions(game_state["Available actions"]))
 
         # action_params = {'Action name': ""}
         # if choice.lower() == 'b':
@@ -89,9 +90,12 @@ if __name__ == '__main__':
         # else:
         #     continue
         #game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
-        result = game_service.perform_action("Player action", command)
-        if result['result'] == 'ERROR':
-            print("ERROR: " + result['error_message'])
+
+            result = game_service.perform_action("Player action", command)
+            if result['result'] == 'ERROR':
+                print("ERROR: " + result['error_message'])
+            if result['result'] == 'OK':
+                break
 
     print_game_state(get_game_state(game_service))
 
