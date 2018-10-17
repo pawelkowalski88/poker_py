@@ -79,5 +79,17 @@ class TestGame(unittest.TestCase):
 
         self.assertEqual(result, True)
 
+    def test_check_betting_fished_true_player_all_in(self):
+        game = Game()
+        game.add_player(Player("Pawel"))
+        game.add_player(Player("Karolina"))
+        game.players[0].bet = 0
+        game.players[1].bet = 0
+        game.players[0].all_in_state = True
+
+        result = game.check_betting_fished()
+
+        self.assertEqual(result, True)
+
 if __name__ == '__main__':
     unittest.main()
