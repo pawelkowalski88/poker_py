@@ -1,5 +1,6 @@
 # Playing card class
 from colorama import Fore,Back, Style, init
+from jsonable import Jsonable
 
 init(convert=True)
 
@@ -17,7 +18,7 @@ def card_to_int(val):
         return 14
     return ValueError
 
-class Card():
+class Card(Jsonable):
 
     def __init__(self, figure, color):
         self.figure = figure

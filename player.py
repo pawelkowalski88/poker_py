@@ -2,8 +2,9 @@
 from card import Card
 from hand import Hand
 from table import Table
+from jsonable import Jsonable
 
-class Player():
+class Player(Jsonable):
 
     def __init__(self, name):
         self.name = name

@@ -19,13 +19,12 @@ class Game():
         self.finished = False
         self.current_player = None
         self.round_no = 0
-        self.game_results = []
+        self.game_results = {}
         self.small_blind = 5
         self.big_blind = 10
         self.pot = 0
         self.max_bet = 0
         self.started = False
-        self.game_results = None
         self.round_finished = False
 
 

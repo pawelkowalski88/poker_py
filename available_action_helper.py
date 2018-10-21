@@ -1,4 +1,5 @@
 from player import Player
+from jsonable import Jsonable
 
 def check_available(players, current_player):
     if not current_player.ready:
@@ -61,7 +62,7 @@ class PlayerActionAvailability():
     def to_player_action(self):
         return PlayerAction(self.name, self.key, self.has_value)
 
-class PlayerAction():
+class PlayerAction(Jsonable):
     def __init__(self, name, key, has_value):
         self.name = name
         self.key = key
