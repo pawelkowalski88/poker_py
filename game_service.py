@@ -3,7 +3,7 @@ from player import Player
 import command
 
 
-class GameService():
+class GameServiceLocal():
 
     def __init__(self):
         self.game = Game()
@@ -16,6 +16,10 @@ class GameService():
         "Get state": self.get_game_state
         }
         self.game_state = None
+
+    def setup_api(self):
+        import game_server
+        game_server.game_service = self
 
     def perform_action(self, action_name, action_params):
         return self.game_actions[action_name](action_params)

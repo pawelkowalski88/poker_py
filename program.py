@@ -1,4 +1,5 @@
-from game_service import GameService
+from game_service import GameServiceLocal
+import os
 
 def get_game_state(game_service):
     return game_service.perform_action("Get state", None)
@@ -39,8 +40,9 @@ def print_player_actions(player_actions):
 
 
 if __name__ == '__main__':   
-    game_service = GameService()
+    game_service = GameServiceLocal()
 
+    game_service.setup_api()
 
     game_service.perform_action("Add player", {"player name": "Pawel"})
     game_service.perform_action("Add player", {"player name": "Karolina"})
@@ -60,37 +62,20 @@ if __name__ == '__main__':
             break
 
     print("\n")
-    print("!!!ROZPOCZYNAMY GRE!!!")
-    print("\n")
+    print("!!!GAME STARTED!!!")
+    print()
 
 
     game_service.perform_action("Start game", None)
     while not game_service.game.finished:
+
         game_state = get_game_state(game_service)
         print_game_state(game_state)
+
         while True:
             command = input(print_player_actions(game_state["Available actions"]))
-
-        # action_params = {'Action name': ""}
-        # if choice.lower() == 'b':
-        #     amount = input("What amount?")
-        #     action_params = {'Action name': 'Bet', 'Amount': amount}
-        # elif choice.lower() == 'c':
-        #     max_bet = game_service.game.max_bet
-        #     action_params = {'Action name': 'Call', 'Max bet': max_bet}
-        # elif choice.lower() == 'f':
-        #     action_params = {'Action name': 'Fold'}
-        # elif choice.lower() == 'r':
-        #     amount = input("What amount to raise?")
-        #     action_params = {'Action name': 'Raise', 'Amount': amount}    
-        # elif choice.lower() == 'a':
-        #     action_params = {'Action name': 'All in'}
-        # elif choice.lower() == 'y':
-        #     action_params = {'Action name': 'Confirm ready'}
-        # else:
-        #     continue
-        #game_service.perform_action("Player action", {"Action name": "Bet", "Amount": 100})
-
+            if command == 'exit':
+                os._exit(1)
             result = game_service.perform_action("Player action", command)
             if result['result'] == 'ERROR':
                 print("ERROR: " + result['error_message'])
@@ -101,5 +86,3 @@ if __name__ == '__main__':
 
     for r in game_service.game.get_game_results():
         print(r["Name"] + " " + r["Best hand"][0] + " " + r["Best hand"][1])
-        # for h in r["Hands"]:
-        #     print(h)
