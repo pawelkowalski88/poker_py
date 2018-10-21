@@ -40,7 +40,3 @@ player_actions = [
     PlayerAction("All in", "A", False),
     PlayerAction("Confirm ready", "Y", False)
 ]
-cmd = CommandParser(player_actions)
-
-result = cmd.parse_and_exetute("b 100", cmd.execute)
-print(result)
