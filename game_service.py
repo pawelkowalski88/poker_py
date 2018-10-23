@@ -41,6 +41,10 @@ class GameServiceLocal():
         command_parser = command.CommandParser(self.game_state["Available actions"])
         return command_parser.parse_and_exetute(cmd, self.game.player_action)
 
+    def get_game_results(self):
+        result = self.game.game_results_rich
+        return result
+
     def get_game_state(self, params):
         self.game_state={
             "Table": self.game.table,
@@ -49,7 +53,7 @@ class GameServiceLocal():
             "Available actions": self.game.get_current_available_actions(),
             "Round no": self.game.round_no,
             "Pot": self.game.pot,
-            "Game results": self.game.game_results
+            "Game results": self.get_game_results()
         }
         return self.game_state
     

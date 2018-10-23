@@ -44,7 +44,7 @@ class HandDescription(Jsonable):
 
     def as_name_and_value(self):
         if self.value:
-            return [self.hand_name, str(self.value)]
-        return [self.hand_name, ""]
+            return {"Name": self.hand_name, "Value": str(self.value)}
+        return {"Name": self.hand_name, "Value": ""}
 
                 

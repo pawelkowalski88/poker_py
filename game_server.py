@@ -35,11 +35,19 @@ def get_game_state():
         "Available actions": list(map(lambda a: dict(a), game_state["Available actions"])),
         "Round no": game_state["Round no"],
         "Pot": game_state["Pot"],
-        "Game results": dict(game_state["Game results"])
+        "Game results": game_state["Game results"]
     }
     return jsonify(return_game_state)
 
 
+@app.route('/perform_action', methods=['POST'])
+def post_player_action():
+    content = request.get_json()
+    print(content["Action name"])
+    print(content["Action params"])
+    result = game_service.perform_action(content["Action name"],content["Action params"])
+    return jsonify(result)
+    
 atexit.register(stop_server)
 server_thread = threading.Thread(target=start_server)
 server_thread.start()
