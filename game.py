@@ -47,9 +47,8 @@ class Game():
         if params['Action name'] == 'All in':
             result = self.current_player.all_in()        
         if params['Action name'] == 'Confirm ready':
-            result = self.set_player_ready()
+            result = self.set_player_ready(params['Value'])
             
-
         if result['result'] == 'OK':
             self.check_game_state()
             if self.round_finished:
@@ -89,8 +88,11 @@ class Game():
             return available_action_helper.get_available_actions(self.players, self.current_player)
         return None
 
-    def set_player_ready(self):
-        self.current_player.ready = True
+    def set_player_ready(self, name):
+        player = list(filter(lambda p: p.name == name, self.players))[0]
+        player.ready = True
+        if all(map(lambda p: p.ready, self.players)):
+            self.started = True
         return {'result':'OK'}
 
 
@@ -114,7 +116,8 @@ class Game():
         winner = self.game_results[0][0]
         print(winner.name)
         winner.balance += self.pot
-        self.pot = 0        
+        self.pot = 0      
+        self.started = False  
 
         
     def check_betting_fished(self):

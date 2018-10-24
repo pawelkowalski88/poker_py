@@ -31,7 +31,7 @@ def get_game_state():
     return_game_state={
         "Table": list(map(lambda c: dict(c), game_state["Table"])),
         "Players": list(map(lambda p: dict(p), game_state["Players"])),
-        "Current player": dict(game_state["Current player"]),
+        "Current player": game_state["Current player"],
         "Available actions": list(map(lambda a: dict(a), game_state["Available actions"])),
         "Round no": game_state["Round no"],
         "Pot": game_state["Pot"],
@@ -40,12 +40,18 @@ def get_game_state():
     return jsonify(return_game_state)
 
 
-@app.route('/perform_action', methods=['POST'])
+@app.route('/player_action', methods=['POST'])
 def post_player_action():
     content = request.get_json()
     print(content["Action name"])
     print(content["Action params"])
-    result = game_service.perform_action(content["Action name"],content["Action params"])
+    result = game_service.player_action(content["Action params"])
+    return jsonify(result)
+
+@app.route('/set_player_ready', methods=['POST'])
+def set_player_ready():
+    content = request.get_json()
+    result = game_service.set_player_ready(content['Name'])
     return jsonify(result)
     
 atexit.register(stop_server)
