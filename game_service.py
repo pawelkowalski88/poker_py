@@ -1,5 +1,6 @@
 from game import Game
 from player import Player
+from jsonable import Jsonable
 import command
 import hashlib
 import json
@@ -50,6 +51,48 @@ class GameServiceLocal():
         result = self.game.game_results_rich
         return result
 
+    def hash_list(self, input_list):
+        result = ""
+        for subval in input_list:
+            if isinstance(subval, dict):
+                result += self.hash_dict(subval)
+            elif isinstance(subval, Jsonable):
+                result += self.hash_dict(dict(subval))
+            else:
+                result += str(subval)
+        return result
+
+    def hash_dict(self, input_dict):
+        result = ""
+        for attr, value in input_dict.items():
+            result+=attr
+            if isinstance(value, list):
+                result += self.hash_list(value)
+            elif isinstance(value, dict):
+                result += self.hash_dict(value)            
+            elif isinstance(value, Jsonable):
+                result += self.hash_dict(dict(value))
+            else:
+                result += str(value)
+        return result
+
+
+    def hash_game_state(self):
+        result = ""
+        for attr, value in self.game_state.items():
+            result+=attr
+            if isinstance(value, list):
+                result += self.hash_list(value)
+            elif isinstance(value, dict):
+                result += self.hash_dict(value)
+            elif isinstance(value, Jsonable):
+                result += self.hash_dict(dict(value))
+            else:
+                result += str(value)
+        return result
+
+
+
 
     def get_game_state(self, params):
         if self.game.started:
@@ -63,7 +106,6 @@ class GameServiceLocal():
                 "Pot": self.game.pot,
                 "Game results": {}
             }
-        
         if not self.game.started:
             self.game_state={
                 "State": "Waiting",
@@ -75,5 +117,9 @@ class GameServiceLocal():
                 "Pot": {},
                 "Game results": self.get_game_results()
             }
+
+        hash_value = self.hash_game_state()
+        self.game_state["Hash value"] = hashlib.md5(hash_value.encode('utf-8')).hexdigest()
+
         return self.game_state
     

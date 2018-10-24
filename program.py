@@ -1,5 +1,5 @@
 from game_service import GameServiceLocal
-import os, time
+import os, time, hashlib
 
 # def get_game_state(game_service):
 #     return game_service.get_game_state(None)
@@ -94,13 +94,17 @@ if __name__ == '__main__':
 
     game_service.set_player_ready("Pawel")
     game_service.set_player_ready("Karolina")
-    game_state = {}
+    game_state = {"Hash value": 0}
     while not game_service.game.finished:
 
         game_state_old = game_state
         game_state = game_service.get_game_state(None)
         while game_state["State"] == "Waiting":
-            print_ready_players_and_results(game_state)
+            if game_state_old["Hash value"] != game_state["Hash value"]:
+                print_ready_players_and_results(game_state)
+            # hsh = game_service.hash_game_state()
+            # print(hsh)
+            # print(hashlib.md5(hsh.encode('utf-8')).hexdigest())
             time.sleep(1)
             game_state_old = game_state
             game_state = game_service.get_game_state(None)
