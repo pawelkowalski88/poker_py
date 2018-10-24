@@ -27,9 +27,13 @@ class Game():
         self.max_bet = 0
         self.started = False
         self.round_finished = False
+        self.no_playing = 0
+        self.no_starting = 0
+        self.initialization = False
 
 
     def player_action(self, params):
+        print('player action')
         if not self.current_player.ready and not params['Action name'] == 'Confirm ready':
             return {'result': 'ERROR', 'error_message': 'The game has not yet started'}
 
@@ -51,6 +55,7 @@ class Game():
             
 
         if result['result'] == 'OK':
+            print('result okej')
             self.check_game_state()
             if self.round_finished:
                 self.finish_round()
@@ -60,7 +65,7 @@ class Game():
         return result
 
     def check_game_state(self):
-
+        print('check game state')
         if self.check_number_of_players_left() == 1:
             self.round_finished = True
             return
@@ -72,20 +77,23 @@ class Game():
                 self.reset_betting_round()
                 if self.finished or self.round_finished:
                     return
-
-        self.current_player = self.get_next_player()
+        if not self.initialization:
+            print('wykonuje get next player')
+            self.current_player = self.get_next_player()
 
         while not (self.current_player and not self.current_player.folded and not self.current_player.all_in_state):
             if self.finished:
                 return
-            if not self.current_player:
-                self.new_loop()
-            self.current_player = self.get_next_player()
+            #if not self.current_player:
+            print('nowa loop')
+            self.new_loop()
 
         return
 
     def get_current_available_actions(self):
         if self.current_player:
+            print('jestem w get current available actions')
+            print(self.no_playing)
             return available_action_helper.get_available_actions(self.players, self.current_player)
         return None
 
@@ -99,8 +107,10 @@ class Game():
         self.table.clear()
         self.dealer.deal_cards_to_players(self.players)
         self.round_no = 0
-        self.players_gen = self.players_generator()
+        self.initialization = True
+        #self.players_gen = self.players_generator()
         self.check_game_state()
+        self.initialization = False
 
     def finish_round(self):
         for p in self.players:
@@ -114,7 +124,9 @@ class Game():
         winner = self.game_results[0][0]
         print(winner.name)
         winner.balance += self.pot
-        self.pot = 0        
+        self.pot = 0 
+        self.no_starting += 1
+        self.no_playing = self.no_starting     
 
         
     def check_betting_fished(self):
@@ -179,17 +191,25 @@ class Game():
         return self.current_player
 
     def get_next_player(self):
+        print('gral gracz nr')
+        print(self.no_playing)
         if self.finished:
             return None
-        try:
-            self.current_player = next(self.players_gen)
+        elif self.no_playing < len(self.players) - 1:
+            print('tutaj jestem')
+            self.no_playing += 1
+            self.current_player = self.players[self.no_playing]
             return self.current_player
-        except:
-            return None
+        else:
+            print('wracam do pierwszego')
+            self.no_playing = 0
+            self.current_player = self.players[self.no_playing]
+            return self.current_player
 
 
     def new_loop(self):
-        self.players_gen=self.players_generator()
+        self.no_playing = self.no_starting
+        self.current_player = self.players[self.no_playing]
 
     def reset_betting_round(self):
         self.new_loop()
@@ -203,3 +223,6 @@ class Game():
             self.pot += p.bet
             p.bet = 0
             p.bet_placed = False
+
+    def get_players_order(self):
+        pass
