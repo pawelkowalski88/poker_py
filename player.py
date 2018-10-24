@@ -72,7 +72,7 @@ class Player(Jsonable):
         self.active = True
         self.folded = False
         self.all_in_state = False
-        self.ready = False
+        self.ready = True
 
     def __gt__(self,other):
         if isinstance(other, Player):

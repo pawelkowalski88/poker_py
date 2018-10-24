@@ -42,7 +42,7 @@ def print_player_actions(player_actions):
 if __name__ == '__main__':   
     game_service = GameServiceLocal()
 
-    game_service.setup_api()
+    # game_service.setup_api()
 
     game_service.perform_action("Add player", {"player name": "Pawel"})
     game_service.perform_action("Add player", {"player name": "Karolina"})

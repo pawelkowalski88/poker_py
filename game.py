@@ -88,6 +88,7 @@ class Game():
             print('nowa loop')
             self.new_loop()
 
+        self.initialization = False
         return
 
     def get_current_available_actions(self):
@@ -110,7 +111,6 @@ class Game():
         self.initialization = True
         #self.players_gen = self.players_generator()
         self.check_game_state()
-        self.initialization = False
 
     def finish_round(self):
         for p in self.players:
@@ -213,6 +213,7 @@ class Game():
 
     def reset_betting_round(self):
         self.new_loop()
+        self.initialization = True
         self.round_no += 1
         self.max_bet = 0
         if self.round_no > 3:
