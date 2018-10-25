@@ -1,4 +1,5 @@
 from game_service import GameServiceLocal
+from player import Player
 import os, time, hashlib
 
 # def get_game_state(game_service):
@@ -27,7 +28,10 @@ def print_game_state(game_state):
         print("No players in game")
     print()
     if cur_player:
-        print("It is your turn, " + str(cur_player))
+        if cur_player == my_player.name:
+            print("It is your turn, " + str(cur_player))
+        else:
+            print(str(cur_player) + "'s turn.")
     print()
 
 
@@ -65,62 +69,39 @@ if __name__ == '__main__':
 
     game_service.setup_api()
 
-    # game_service.perform_action("Add player", {"player name": "Pawel"})
-    # game_service.perform_action("Add player", {"player name": "Karolina"})
     game_service.add_player("Pawel")
     game_service.add_player("Karolina")
 
-    game_service.game.players[0].balance = 3000
-
-    # while True:
-    #     print("P - nowy gracz")
-    #     print("G - graj")
-    #     choice = input("?")
-
-    #     if choice.upper() == "P":
-    #         player_name = input("Podaj imie gracza:")
-    #         game_service.add_player(player_name)
-        
-    #     if choice.upper() == "G":
-    #         break
-
-    # print("\n")
-    # print("!!!GAME STARTED!!!")
-    # print()
+    my_player = game_service.game.players[0]
 
     game_service.start_game(None)        
-        
-    # game_state = get_game_state(game_service)
 
     game_service.set_player_ready("Pawel")
     game_service.set_player_ready("Karolina")
+
     game_state = {"Hash value": 0}
     while not game_service.game.finished:
 
         game_state_old = game_state
         game_state = game_service.get_game_state(None)
-        while game_state["State"] == "Waiting":
-            if game_state_old["Hash value"] != game_state["Hash value"]:
+        if game_state_old["Hash value"] != game_state["Hash value"]:
+            if game_state["State"] == "Waiting":
                 print_ready_players_and_results(game_state)
-            # hsh = game_service.hash_game_state()
-            # print(hsh)
-            # print(hashlib.md5(hsh.encode('utf-8')).hexdigest())
-            time.sleep(1)
-            game_state_old = game_state
-            game_state = game_service.get_game_state(None)
+            else:
+                print_game_state(game_state)
 
-        game_state = game_service.get_game_state(None)
-        print_game_state(game_state)
-        while True:
-            command = input(print_player_actions(game_state["Available actions"]))
-            if command == 'exit':
-                os._exit(1)
-            # result = game_service.perform_action("Player action", command)
-            result = game_service.player_action(command)
-            if result['result'] == 'ERROR':
-                print("ERROR: " + result['error_message'])
-            if result['result'] == 'OK':
-                break
+        time.sleep(1)
+        
+        if game_state['Current player'] == my_player.name:
+            while True:
+                command = input(print_player_actions(game_state["Available actions"])).strip()
+                if command == 'exit':
+                    os._exit(1)
+                result = game_service.player_action(command)
+                if result['result'] == 'ERROR':
+                    print("ERROR: " + result['error_message'])
+                if result['result'] == 'OK':
+                    break
 
     print_game_state(game_service.get_game_state(None))
 
