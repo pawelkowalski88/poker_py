@@ -65,21 +65,10 @@ if __name__ == '__main__':
     print("!!!GAME STARTED!!!")
     print()
 
-    print(game_service.game.no_playing)
-    print(game_service.game.no_starting)
-    print('robie start game')
-
     game_service.perform_action("Start game", None)
-    print('start game zrobione')
-    print(game_service.game.no_playing)
-    print(game_service.game.no_starting)
 
     while not game_service.game.finished:
-        print(game_service.game.no_playing)
-        print(game_service.game.no_starting)
         game_state = get_game_state(game_service)
-        print(game_service.game.no_playing)
-        print(game_service.game.no_starting)
         print_game_state(game_state)
 
         while True:
