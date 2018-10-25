@@ -8,15 +8,15 @@ import random
 class Dealer():
 
     def __init__(self, table):
-        self.carddeck = self.generate_deck()
+        self.carddeck = []
+        self.generate_deck()
         self.table = table
 
     def generate_deck(self):
-        carddeck = []
+        self.carddeck = []
         figures = [2,3,4,5,6,7,8,9,10,"J","Q","K","A"]
         colors = ['♠', '♣', '♥', '♦']
-        carddeck = [Card(f, c) for f in figures for c in colors]
-        return carddeck
+        self.carddeck = [Card(f, c) for f in figures for c in colors]
 
     def deal_cards_to_players(self, players):
         for p in players:

@@ -100,6 +100,7 @@ class Game():
     def initialize_round(self):
         self.dealer.collect_cards(self.players)
         self.table.clear()
+        self.dealer.generate_deck()
         self.dealer.deal_cards_to_players(self.players)
         self.round_no = 0
         self.initialization = True

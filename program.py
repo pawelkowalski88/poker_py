@@ -75,7 +75,11 @@ if __name__ == '__main__':
             command = input(print_player_actions(game_state["Available actions"]))
             if command == 'exit':
                 os._exit(1)
-            result = game_service.perform_action("Player action", command)
+            try:
+                result = game_service.perform_action("Player action", command)
+            except Exception as e:
+                print("type error: " + str(e))
+
             if result['result'] == 'ERROR':
                 print("ERROR: " + result['error_message'])
             if result['result'] == 'OK':
