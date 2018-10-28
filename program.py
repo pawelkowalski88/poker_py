@@ -1,6 +1,8 @@
 from game_service import GameServiceLocal
+from game_state import GameState
 from player import Player
 import os, time, hashlib
+from remote_game_service import RemoteGameService
 
 # def get_game_state(game_service):
 #     return game_service.get_game_state(None)
@@ -8,9 +10,9 @@ import os, time, hashlib
 def print_game_state(game_state):
     print()
     print()
-    table = game_state["Table"]
-    players = game_state["Players"]
-    cur_player = game_state["Current player"]
+    table = game_state.table
+    players = game_state.players
+    cur_player = game_state.current_player
     if table:
         print("Cards on the table:")
         card_str = []
@@ -19,7 +21,7 @@ def print_game_state(game_state):
     else:
         print("No cards on the table")
     print()
-    print("Pot: " + str(game_state["Pot"]))
+    print("Pot: " + str(game_state.pot))
     if players:
         print("Players in game:")
         for p in players:
@@ -45,12 +47,12 @@ def print_player_actions(player_actions):
 def print_ready_players_and_results(game_state):
 
     print()
-    for r in game_state["Game results"]:
-        print(r["Name"] + " " + r["Best hand"]["Name"] + " " + r["Best hand"]["Value"])
+    for r in game_state.game_results:
+        print(r["name"] + " " + r["best_hand"]["name"] + " " + r["best_hand"]["value"])
 
     print()
 
-    for p in game_state['Players']:
+    for p in game_state.players:
         print(p.name + " " + player_ready_as_str(p.ready))
     print()
 
@@ -66,6 +68,7 @@ def player_ready_as_str(ready):
 
 if __name__ == '__main__':   
     game_service = GameServiceLocal()
+    game_service_remote = RemoteGameService("http://localhost:5000")
 
     game_service.setup_api()
 
@@ -79,22 +82,23 @@ if __name__ == '__main__':
     game_service.set_player_ready("Pawel")
     game_service.set_player_ready("Karolina")
 
-    game_state = {"Hash value": 0}
+    game_state = GameState.empty_game_state()
     while not game_service.game.finished:
 
         game_state_old = game_state
         game_state = game_service.get_game_state(None)
-        if game_state_old["Hash value"] != game_state["Hash value"]:
-            if game_state["State"] == "Waiting":
+        game_state_json = game_service_remote.get_game_state()
+        if game_state_old.hash_value != game_state.hash_value:
+            if game_state.state == "Waiting":
                 print_ready_players_and_results(game_state)
             else:
                 print_game_state(game_state)
 
         time.sleep(1)
         
-        if game_state['Current player'] == my_player.name:
+        if game_state.current_player == my_player.name:
             while True:
-                command = input(print_player_actions(game_state["Available actions"])).strip()
+                command = input(print_player_actions(game_state.available_actions)).strip()
                 if command == 'exit':
                     os._exit(1)
                 result = game_service.player_action(command)

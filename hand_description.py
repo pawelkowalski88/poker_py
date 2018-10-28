@@ -1,5 +1,5 @@
 from card import card_to_int
-from jsonable import Jsonable
+from jsonconvert import JsonConvert
 
 hand_ranking = {
 "High card": 1,
@@ -12,9 +12,10 @@ hand_ranking = {
 "Four of a kind": 8,
 "Straight flush": 9}
 
-class HandDescription(Jsonable):
+@JsonConvert.register
+class HandDescription():
 
-    def __init__(self, hand_name, value, returned_cards):
+    def __init__(self, hand_name="", value="", returned_cards=None):
         self.hand_name = hand_name
         self.value = value
         self.returned_cards = returned_cards
@@ -44,7 +45,7 @@ class HandDescription(Jsonable):
 
     def as_name_and_value(self):
         if self.value:
-            return {"Name": self.hand_name, "Value": str(self.value)}
-        return {"Name": self.hand_name, "Value": ""}
+            return {"name": self.hand_name, "value": str(self.value)}
+        return {"name": self.hand_name, "value": ""}
 
                 

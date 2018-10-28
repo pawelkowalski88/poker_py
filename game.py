@@ -47,7 +47,7 @@ class Game():
         if params['Action name'] == 'All in':
             result = self.current_player.all_in()        
         if params['Action name'] == 'Confirm ready':
-            result = self.set_player_ready(params['Value'])
+            result = self.set_player_ready(self.current_player.name)
             
         if result['result'] == 'OK':
             self.check_game_state()
@@ -152,10 +152,10 @@ class Game():
         result = []
         for group in players_ranking:
             for p in group:
-                result.append({"Name": p.name,
-                "Hands": list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
-                "Cards": p.print_cards(),
-                "Best hand": p.cards.hands_list[0].as_name_and_value()})    
+                result.append({"name": p.name,
+                "hands": list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
+                "cards": p.print_cards(),
+                "best_hand": p.cards.hands_list[0].as_name_and_value()})    
         return result
 
     def create_results_ranking(self, players_tab):

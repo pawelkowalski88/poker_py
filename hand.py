@@ -2,10 +2,11 @@
 from card import Card
 from hand_description import HandDescription
 from collections import Counter
-from jsonable import Jsonable
+from jsonconvert import JsonConvert
 
-class Hand(Jsonable):
-    def __init__(self, cards_on_table):
+@JsonConvert.register
+class Hand(object):
+    def __init__(self, cards_on_table=None):
         self.cards = []
         self.cards_on_table = cards_on_table
         self.hands_list = []

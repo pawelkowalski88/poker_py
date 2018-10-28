@@ -2,11 +2,12 @@
 from card import Card
 from hand import Hand
 from table import Table
-from jsonable import Jsonable
+from jsonconvert import JsonConvert
 
-class Player(Jsonable):
+@JsonConvert.register
+class Player(object):
 
-    def __init__(self, name):
+    def __init__(self, name:str = ""):
         self.name = name
         self.balance = 5000
         self.cards = Hand(None)

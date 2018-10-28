@@ -1,6 +1,6 @@
 from game import Game
 from player import Player
-from jsonable import Jsonable
+from game_state import GameState
 import command
 import hashlib
 import json
@@ -44,12 +44,13 @@ class GameServiceLocal():
         return self.game.set_player_ready(params)
 
     def player_action(self, cmd):
-        command_parser = command.CommandParser(self.game_state["Available actions"])
+        command_parser = command.CommandParser(self.game_state.available_actions)
         return command_parser.parse_and_exetute(cmd, self.game.player_action)
 
     def get_game_results(self):
         result = self.game.game_results_rich
         return result
+
 
     def hash_list(self, input_list):
         result = ""
@@ -76,50 +77,68 @@ class GameServiceLocal():
                 result += str(value)
         return result
 
-
     def hash_game_state(self):
-        result = ""
-        for attr, value in self.game_state.items():
-            result+=attr
-            if isinstance(value, list):
-                result += self.hash_list(value)
-            elif isinstance(value, dict):
-                result += self.hash_dict(value)
-            elif isinstance(value, Jsonable):
-                result += self.hash_dict(dict(value))
-            else:
-                result += str(value)
-        return result
-
-
+        return 0
+        # result = ""
+        # for attr, value in self.game_state.items():
+        #     result+=attr
+        #     if isinstance(value, list):
+        #         result += self.hash_list(value)
+        #     elif isinstance(value, dict):
+        #         result += self.hash_dict(value)
+        #     elif isinstance(value, Jsonable):
+        #         result += self.hash_dict(dict(value))
+        #     else:
+        #         result += str(value)
+        # return result
 
 
     def get_game_state(self, params):
         if self.game.started:
-            self.game_state={
-                "State": "Started",
-                "Table": self.game.table,
-                "Players": self.game.players,
-                "Current player": self.game.current_player.name,
-                "Available actions": self.game.get_current_available_actions(),
-                "Round no": self.game.round_no,
-                "Pot": self.game.pot,
-                "Game results": {}
-            }
+            self.game_state = GameState(
+                "Started",
+                self.game.table,
+                self.game.players,
+                self.game.current_player.name,
+                self.game.get_current_available_actions(),
+                self.game.round_no,
+                self.game.pot,
+                None
+            )
+            # self.game_state={
+            #     "state": "Started",
+            #     "table": self.game.table,
+            #     "players": self.game.players,
+            #     "current_player": self.game.current_player.name,
+            #     "available_actions": self.game.get_current_available_actions(),
+            #     "round_no": self.game.round_no,
+            #     "pot": self.game.pot,
+            #     "game_results": {}
+            # }
         if not self.game.started:
-            self.game_state={
-                "State": "Waiting",
-                "Table": {},
-                "Players": self.game.players,
-                "Current player": {},
-                "Available actions": {},
-                "Round no": {},
-                "Pot": {},
-                "Game results": self.get_game_results()
-            }
+            self.game_state = GameState(
+                state = "Waiting",
+                table = self.game.table,
+                players = self.game.players,
+                current_player = self.game.current_player.name,
+                available_actions = self.game.get_current_available_actions(),
+                round_no = self.game.round_no,
+                pot = self.game.pot,
+                game_results = self.get_game_results()
+            )
+            # self.game_state={
+            #     "state": "Waiting",
+            #     "table": {},
+            #     "players": self.game.players,
+            #     "current_player": {},
+            #     "available_actions": {},
+            #     "round_no": {},
+            #     "pot": {},
+            #     "game_results": self.get_game_results()
+            # }
 
-        hash_value = self.hash_game_state()
-        self.game_state["Hash value"] = hashlib.md5(hash_value.encode('utf-8')).hexdigest()
+        # hash_value = self.hash_game_state()
+        # self.game_state["hash_value"] = hashlib.md5(hash_value.encode('utf-8')).hexdigest()
 
         return self.game_state
     

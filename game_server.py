@@ -8,6 +8,7 @@ import time
 import atexit
 import logging
 import json
+from jsonconvert import JsonConvert
 
 game_service: GameServiceLocal = None
 app = Flask(__name__)
@@ -28,16 +29,17 @@ def index():
 @app.route('/game_state')
 def get_game_state():
     game_state = game_service.get_game_state(None)
-    return_game_state={
-        "Table": list(map(lambda c: dict(c), game_state["Table"])),
-        "Players": list(map(lambda p: dict(p), game_state["Players"])),
-        "Current player": game_state["Current player"],
-        "Available actions": list(map(lambda a: dict(a), game_state["Available actions"])),
-        "Round no": game_state["Round no"],
-        "Pot": game_state["Pot"],
-        "Game results": game_state["Game results"]
-    }
-    return jsonify(return_game_state)
+    # return_game_state={
+    #     "Table": list(map(lambda c: dict(c), game_state.table)),
+    #     "Players": list(map(lambda p: dict(p), game_state.players)),
+    #     "Current player": game_state.current_player,
+    #     "Available actions": list(map(lambda a: dict(a), game_state.available_actions)),
+    #     "Round no": game_state.round_no,
+    #     "Pot": game_state.pot,
+    #     "Game results": game_state.game_results
+    # }
+    return JsonConvert.ToJSON(game_state)
+    # return jsonify(return_game_state)
 
 
 @app.route('/player_action', methods=['POST'])
@@ -52,6 +54,12 @@ def post_player_action():
 def set_player_ready():
     content = request.get_json()
     result = game_service.set_player_ready(content['Name'])
+    return jsonify(result)
+
+@app.route('/add_player', methods=['POST'])
+def add_player():
+    content = request.get_json()
+    result = game_service.add_player(content['Name'])
     return jsonify(result)
     
 atexit.register(stop_server)
