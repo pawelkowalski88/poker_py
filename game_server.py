@@ -45,8 +45,8 @@ def get_game_state():
 @app.route('/player_action', methods=['POST'])
 def post_player_action():
     content = request.get_json()
-    print(content["Action name"])
-    print(content["Action params"])
+    # print(content["Action name"])
+    # print(content["Action params"])
     result = game_service.player_action(content["Action params"])
     return jsonify(result)
 

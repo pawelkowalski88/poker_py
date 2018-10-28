@@ -82,10 +82,10 @@ class Player(object):
         self.cards = Hand(None)
         self.bet = 0
         self.bet_placed = False
-        self.active = True
+        # self.active = True
         self.folded = False
         self.all_in_state = False
-        self.ready = False
+        self.ready = True
 
     def __gt__(self,other):
         if isinstance(other, Player):

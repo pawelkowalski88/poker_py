@@ -54,8 +54,8 @@ class Game():
             if self.round_finished:
                 self.finish_round()
                 self.game_results_rich = self.get_game_results()
-                self.initialize_round()
-                self.round_finished = False
+                # self.initialize_round()
+                # self.round_finished = False
         return result
 
     def check_game_state(self):
@@ -80,7 +80,6 @@ class Game():
             if not self.current_player:
                 self.new_loop()
             self.current_player = self.get_next_player()
-
         return
 
     def get_current_available_actions(self):
@@ -93,6 +92,8 @@ class Game():
         player.ready = True
         if all(map(lambda p: p.ready, self.players)):
             self.started = True
+            self.initialize_round()
+            self.round_finished = False
         return {'result':'OK'}
 
 
@@ -105,6 +106,7 @@ class Game():
         self.check_game_state()
 
     def finish_round(self):
+        self.current_player = None
         for p in self.players:
             self.pot += p.bet
             p.bet = 0

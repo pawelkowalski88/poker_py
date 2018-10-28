@@ -45,11 +45,30 @@ def print_player_actions(player_actions):
     return result
 
 def print_ready_players_and_results(game_state):
-
+    print()
+    table = game_state.table
+    players = game_state.players
+    cur_player = game_state.current_player
+    if table:
+        print("Cards on the table:")
+        card_str = []
+        card_str = [c.__str__() for c in table]
+        print("".join(card_str))
+    else:
+        print("No cards on the table")
+    print()
+    print("Pot: " + str(game_state.pot))
+    if players:
+        print("Players in game:")
+        for p in players:
+            print(p)
+    else:
+        print("No players in game")
     print()
     for r in game_state.game_results:
         print(r["name"] + " " + r["best_hand"]["name"] + " " + r["best_hand"]["value"])
 
+    print()
     print()
 
     for p in game_state.players:
@@ -73,7 +92,7 @@ if __name__ == '__main__':
 
     my_player = game_service.game.players[0]
 
-    game_service.start_game(None)        
+    # game_service.start_game(None)        
 
     game_service.set_player_ready("Pawel")
     game_service.set_player_ready("Karolina")

@@ -94,12 +94,17 @@ class GameServiceLocal():
 
 
     def get_game_state(self, params):
+        if self.game.current_player:
+            current_player_name = self.game.current_player.name
+        else:
+            current_player_name = ""
+
         if self.game.started:
             self.game_state = GameState(
                 "Started",
                 self.game.table,
                 self.game.players,
-                self.game.current_player.name,
+                current_player_name,
                 self.game.get_current_available_actions(),
                 self.game.round_no,
                 self.game.pot,
@@ -120,7 +125,7 @@ class GameServiceLocal():
                 state = "Waiting",
                 table = self.game.table,
                 players = self.game.players,
-                current_player = self.game.current_player.name,
+                current_player = current_player_name,
                 available_actions = self.game.get_current_available_actions(),
                 round_no = self.game.round_no,
                 pot = self.game.pot,
