@@ -8,7 +8,7 @@ class GameState(object):
     def __init__(
             self, state="Waiting", table=None, players=None, 
             current_player="", available_actions=None, 
-            round_no=None, pot=None, game_results=None):
+            round_no=None, pot=None, game_results=None, hash_value=None):
         self.state = state
         self.table = table
         self.players = players

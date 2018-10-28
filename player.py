@@ -7,16 +7,28 @@ from jsonconvert import JsonConvert
 @JsonConvert.register
 class Player(object):
 
-    def __init__(self, name:str = ""):
-        self.name = name
-        self.balance = 5000
-        self.cards = Hand(None)
-        self.bet = 0
-        self.bet_placed = False
-        self.active = True
-        self.folded = False
-        self.all_in_state = False
-        self.ready = True
+    def __init__(self, name:str = "", balance=5000, cards=None, bet=0, bet_placed=False, 
+                active=True, folded=False, all_in_state=False, ready=True):
+            self.name = name
+            self.balance = balance
+            self.cards = cards
+            self.bet = bet
+            self.bet_placed = bet_placed
+            self.active = active
+            self.folded = folded
+            self.all_in_state = all_in_state
+            self.ready = ready
+
+    # def __init__(self, name:str = ""):
+    #         self.name = name
+    #         self.balance = 5000
+    #         self.cards = None
+    #         self.bet = 0
+    #         self.bet_placed = False
+    #         self.active = True
+    #         self.folded = False
+    #         self.all_in_state = False
+    #         self.ready = True
 
     def add_card(self, card):
         self.cards.cards.append(card)

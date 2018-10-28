@@ -24,11 +24,11 @@ def from_dict(self, source):
 @JsonConvert.register
 class Card(object):
 
-    def __init__(self, figure:str="", color:str=""):
+    def __init__(self, figure:str="", color:str="", covered = False, taken = False):
         self.figure = figure
         self.color = color
-        self.covered = False
-        self.taken = False
+        self.covered = covered
+        self.taken = taken
 
     def __str__(self):
         if self.covered:

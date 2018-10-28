@@ -3,6 +3,7 @@ from table import Table
 from card import Card
 import json
 from collections import namedtuple
+from jsonconvert import JsonConvert
 
 class RemoteGameService():
 
@@ -19,7 +20,8 @@ class RemoteGameService():
         request = requests.get(self.base_url + '/game_state')
         data = request.text
         # result = json.loads(data, object_hook=lambda d: namedtuple('X', self.extract_fields(d.keys()))(*d.values()))
-        return data
+        result = JsonConvert.FromJSON(data)
+        return result
 
     def extract_fields(self, field_names):
         result = list(map(lambda f: f.replace(" ","_").lower(), field_names))

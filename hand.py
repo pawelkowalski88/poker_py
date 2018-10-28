@@ -6,10 +6,10 @@ from jsonconvert import JsonConvert
 
 @JsonConvert.register
 class Hand(object):
-    def __init__(self, cards_on_table=None):
-        self.cards = []
+    def __init__(self, cards_on_table=None, cards=[], hands_list=[]):
+        self.cards = cards
         self.cards_on_table = cards_on_table
-        self.hands_list = []
+        self.hands_list = hands_list
 
     def print_cards(self, all=True):
         # print("Cards:")

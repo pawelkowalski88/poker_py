@@ -56,10 +56,6 @@ def print_ready_players_and_results(game_state):
         print(p.name + " " + player_ready_as_str(p.ready))
     print()
 
-
-
-
-
 def player_ready_as_str(ready):
     if ready:
         return "Ready"
@@ -87,7 +83,6 @@ if __name__ == '__main__':
 
         game_state_old = game_state
         game_state = game_service.get_game_state(None)
-        game_state_json = game_service_remote.get_game_state()
         if game_state_old.hash_value != game_state.hash_value:
             if game_state.state == "Waiting":
                 print_ready_players_and_results(game_state)
