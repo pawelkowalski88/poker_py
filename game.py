@@ -33,7 +33,6 @@ class Game():
 
 
     def player_action(self, params):
-        print('player action')
         if not self.current_player.ready and not params['Action name'] == 'Confirm ready':
             return {'result': 'ERROR', 'error_message': 'The game has not yet started'}
 
@@ -104,7 +103,8 @@ class Game():
         self.dealer.deal_cards_to_players(self.players)
         self.round_no = 0
         self.initialization = True
-        #self.players_gen = self.players_generator()
+        self.check_game_state()
+        self.bet_blinds()
         self.check_game_state()
 
     def finish_round(self):
@@ -222,3 +222,20 @@ class Game():
             self.pot += p.bet
             p.bet = 0
             p.bet_placed = False
+
+    def bet_blinds(self):
+        result = None
+        result = self.current_player.place_bet(self.small_blind) 
+        if result['result'] == 'ERROR':
+            result = self.current_player.all_in()
+        if result['result'] == 'ERROR':
+            print("ERROR: " + result['error_message'])
+        self.get_next_player()
+        result = self.current_player.place_bet(self.big_blind) 
+        if result['result'] == 'ERROR':
+            result = self.current_player.all_in()
+        if result['result'] == 'ERROR':
+            print("ERROR: " + result['error_message'])
+        self.get_next_player()
+        self.initialization = True
+
