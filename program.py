@@ -91,11 +91,12 @@ if __name__ == '__main__':
     game_service.add_player("Karolina")
 
     my_player = game_service.game.players[0]
+    game_service.my_player = my_player
 
-    # game_service.start_game(None)        
+    game_service.start_game(None)        
 
-    game_service.set_player_ready("Pawel")
-    game_service.set_player_ready("Karolina")
+    # game_service.set_player_ready("Pawel")
+    # game_service.set_player_ready("Karolina")
 
     game_state = GameState.empty_game_state()
     while not game_service.game.finished:
@@ -110,7 +111,7 @@ if __name__ == '__main__':
 
         time.sleep(1)
         
-        if game_state.current_player == my_player.name:
+        if game_state.current_player == my_player.name or not game_state.current_player and not my_player.ready:
             while True:
                 command = input(print_player_actions(game_state.available_actions)).strip()
                 if command == 'exit':

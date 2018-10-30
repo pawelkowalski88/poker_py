@@ -30,7 +30,7 @@ class Game():
 
 
     def player_action(self, params):
-        if not self.current_player.ready and not params['Action name'] == 'Confirm ready':
+        if not self.current_player and not params['Action name'] == 'Confirm ready':
             return {'result': 'ERROR', 'error_message': 'The game has not yet started'}
 
         result = {}
@@ -47,7 +47,8 @@ class Game():
         if params['Action name'] == 'All in':
             result = self.current_player.all_in()        
         if params['Action name'] == 'Confirm ready':
-            result = self.set_player_ready(self.current_player.name)
+            result = self.set_player_ready(params["Player"].name)
+            return result
             
         if result['result'] == 'OK':
             self.check_game_state()
@@ -55,7 +56,7 @@ class Game():
                 self.finish_round()
                 self.game_results_rich = self.get_game_results()
                 # self.initialize_round()
-                # self.round_finished = False
+                self.round_finished = False
         return result
 
     def check_game_state(self):
@@ -82,22 +83,22 @@ class Game():
             self.current_player = self.get_next_player()
         return
 
-    def get_current_available_actions(self):
-        if self.current_player:
-            return available_action_helper.get_available_actions(self.players, self.current_player)
+    def get_current_available_actions(self, my_player):
+        if self.current_player or my_player:
+            return available_action_helper.get_available_actions(self.players, self.current_player, my_player)
         return None
 
     def set_player_ready(self, name):
         player = list(filter(lambda p: p.name == name, self.players))[0]
         player.ready = True
         if all(map(lambda p: p.ready, self.players)):
-            self.started = True
             self.initialize_round()
             self.round_finished = False
         return {'result':'OK'}
 
 
     def initialize_round(self):
+        self.started = True
         self.dealer.collect_cards(self.players)
         self.table.clear()
         self.dealer.deal_cards_to_players(self.players)

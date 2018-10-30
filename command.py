@@ -5,7 +5,7 @@ class CommandParser():
     def __init__(self, available_commands):
         self.available_commands = available_commands
 
-    def parse_and_exetute(self, command: str, function):
+    def parse_and_exetute(self, command: str, function, player=None):
         elements = command.split(' ')
 
         try:
@@ -24,7 +24,7 @@ class CommandParser():
             else:
                 value = None
         
-        return function({"Action name": cmd.name, "Value": value})
+        return function({"Action name": cmd.name, "Value": value, "Player": player})
 
 
     def execute(self, params):

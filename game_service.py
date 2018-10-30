@@ -19,6 +19,7 @@ class GameServiceLocal():
         "Get state": self.get_game_state
         }
         self.game_state = None
+        self.my_player = None
 
     def setup_api(self):
         import game_server
@@ -45,40 +46,40 @@ class GameServiceLocal():
 
     def player_action(self, cmd):
         command_parser = command.CommandParser(self.game_state.available_actions)
-        return command_parser.parse_and_exetute(cmd, self.game.player_action)
+        return command_parser.parse_and_exetute(cmd, self.game.player_action, self.my_player)
 
     def get_game_results(self):
         result = self.game.game_results_rich
         return result
 
 
-    def hash_list(self, input_list):
-        result = ""
-        for subval in input_list:
-            if isinstance(subval, dict):
-                result += self.hash_dict(subval)
-            elif isinstance(subval, Jsonable):
-                result += self.hash_dict(dict(subval))
-            else:
-                result += str(subval)
-        return result
+    # def hash_list(self, input_list):
+    #     result = ""
+    #     for subval in input_list:
+    #         if isinstance(subval, dict):
+    #             result += self.hash_dict(subval)
+    #         elif isinstance(subval, Jsonable):
+    #             result += self.hash_dict(dict(subval))
+    #         else:
+    #             result += str(subval)
+    #     return result
 
-    def hash_dict(self, input_dict):
-        result = ""
-        for attr, value in input_dict.items():
-            result+=attr
-            if isinstance(value, list):
-                result += self.hash_list(value)
-            elif isinstance(value, dict):
-                result += self.hash_dict(value)            
-            elif isinstance(value, Jsonable):
-                result += self.hash_dict(dict(value))
-            else:
-                result += str(value)
-        return result
+    # def hash_dict(self, input_dict):
+    #     result = ""
+    #     for attr, value in input_dict.items():
+    #         result+=attr
+    #         if isinstance(value, list):
+    #             result += self.hash_list(value)
+    #         elif isinstance(value, dict):
+    #             result += self.hash_dict(value)            
+    #         elif isinstance(value, Jsonable):
+    #             result += self.hash_dict(dict(value))
+    #         else:
+    #             result += str(value)
+    #     return result
 
-    def hash_game_state(self):
-        return 0
+    # def hash_game_state(self):
+    #     return 0
         # result = ""
         # for attr, value in self.game_state.items():
         #     result+=attr
@@ -105,7 +106,7 @@ class GameServiceLocal():
                 self.game.table,
                 self.game.players,
                 current_player_name,
-                self.game.get_current_available_actions(),
+                self.game.get_current_available_actions(self.my_player),
                 self.game.round_no,
                 self.game.pot,
                 None
@@ -126,7 +127,7 @@ class GameServiceLocal():
                 table = self.game.table,
                 players = self.game.players,
                 current_player = current_player_name,
-                available_actions = self.game.get_current_available_actions(),
+                available_actions = self.game.get_current_available_actions(self.my_player),
                 round_no = self.game.round_no,
                 pot = self.game.pot,
                 game_results = self.get_game_results()

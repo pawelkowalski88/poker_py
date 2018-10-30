@@ -76,7 +76,9 @@ class Player(object):
         return self.place_bet(raise_amount)        
 
     def print_cards(self):
-        return self.cards.print_cards(False)
+        if self.cards:
+            return self.cards.print_cards(False)
+        return ""
 
     def reset_player(self):
         self.cards = Hand(None)
@@ -92,6 +94,7 @@ class Player(object):
             return self.cards > other.cards
 
     def __str__(self):
+        
         result = self.name + " " + str(self.balance) + " " + self.print_cards() + " bet: " + str(self.bet) + " folded: " + str(self.folded)
         if self.all_in_state:
             result += " ALL IN"
