@@ -23,6 +23,9 @@ class RemoteGameService():
         result = JsonConvert.FromJSON(data)
         return result
 
+    def set_player_ready():
+        pass
+
     def extract_fields(self, field_names):
         result = list(map(lambda f: f.replace(" ","_").lower(), field_names))
         return result

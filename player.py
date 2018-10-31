@@ -8,7 +8,7 @@ from jsonconvert import JsonConvert
 class Player(object):
 
     def __init__(self, name:str = "", balance=5000, cards=None, bet=0, bet_placed=False, 
-                active=True, folded=False, all_in_state=False, ready=True):
+                active=True, folded=False, all_in_state=False, ready=False):
             self.name = name
             self.balance = balance
             self.cards = cards

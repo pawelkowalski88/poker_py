@@ -47,7 +47,7 @@ def post_player_action():
     content = request.get_json()
     # print(content["Action name"])
     # print(content["Action params"])
-    result = game_service.player_action(content["Action params"])
+    result = game_service.player_action(content["Action params"], "")
     return jsonify(result)
 
 @app.route('/set_player_ready', methods=['POST'])
@@ -60,10 +60,11 @@ def set_player_ready():
 def add_player():
     content = request.get_json()
     result = game_service.add_player(content['Name'])
-    return jsonify(result)
+    return JsonConvert.ToJSON(result)
     
 atexit.register(stop_server)
 server_thread = threading.Thread(target=start_server)
+server_thread.daemon = True
 server_thread.start()
 time.sleep(1)
 

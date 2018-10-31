@@ -2,10 +2,13 @@ from game_service import GameServiceLocal
 from game_state import GameState
 from player import Player
 import os, time, hashlib
+import threading
 from remote_game_service import RemoteGameService
 
 # def get_game_state(game_service):
 #     return game_service.get_game_state(None)
+
+game_state = None
 
 def print_game_state(game_state):
     print()
@@ -30,7 +33,7 @@ def print_game_state(game_state):
         print("No players in game")
     print()
     if cur_player:
-        if cur_player == my_player.name:
+        if cur_player == game_service.my_player.name:
             print("It is your turn, " + str(cur_player))
         else:
             print(str(cur_player) + "'s turn.")
@@ -80,27 +83,21 @@ def player_ready_as_str(ready):
         return "Ready"
     return "Not ready"
 
+def refresh_player_command():
+    if game_state.current_player == game_service.my_player.name or not game_state.current_player and not my_player.ready:
+        while True:
+            command = input("").strip()
+            if command == 'exit':
+                os._exit(1)
+            result = game_service.player_action(command, my_player)
+            if result['result'] == 'ERROR':
+                print("ERROR: " + result['error_message'])
+            if result['result'] == 'OK':
+                break  
 
-if __name__ == '__main__':   
-    game_service = GameServiceLocal()
-    game_service_remote = RemoteGameService("http://localhost:5000")
-
-    game_service.setup_api()
-
-    game_service.add_player("Pawel")
-    game_service.add_player("Karolina")
-
-    my_player = game_service.game.players[0]
-    game_service.my_player = my_player
-
-    game_service.start_game(None)        
-
-    # game_service.set_player_ready("Pawel")
-    # game_service.set_player_ready("Karolina")
-
-    game_state = GameState.empty_game_state()
-    while not game_service.game.finished:
-
+def refresh_game_state():
+    global game_state
+    while True:
         game_state_old = game_state
         game_state = game_service.get_game_state(None)
         if game_state_old.hash_value != game_state.hash_value:
@@ -109,21 +106,65 @@ if __name__ == '__main__':
             else:
                 print_game_state(game_state)
 
+            if game_state.current_player == game_service.my_player.name or not game_state.current_player and not my_player.ready:
+                print(print_player_actions(game_service.get_available_actions(my_player)))
         time.sleep(1)
-        
-        if game_state.current_player == my_player.name or not game_state.current_player and not my_player.ready:
-            while True:
-                command = input(print_player_actions(game_state.available_actions)).strip()
-                if command == 'exit':
-                    os._exit(1)
-                result = game_service.player_action(command)
-                if result['result'] == 'ERROR':
-                    print("ERROR: " + result['error_message'])
-                if result['result'] == 'OK':
-                    break
+  
 
-    print_game_state(game_service.get_game_state(None))
+while True:
+    game_mode = input("Host - H, Join - J, Exit - E:")
+    if game_mode.lower() == "h":
+        game_service = GameServiceLocal()
+        game_service.setup_api()
+        break
+    elif game_mode.lower() == "j":
+        game_service = RemoteGameService("http://localhost:5000")
+        break
+    elif game_mode.lower() == "e":
+        os._exit(1)
+game_state = GameState.empty_game_state()
 
-    for r in game_service.game.get_game_results():
-        print(r["Name"] + " " + r["Best hand"][0] + " " + r["Best hand"][1])
+my_player_name = input("Please enter your name:")
+my_player = game_service.add_player(my_player_name)
+# game_service.my_player = my_player
+
+# game_service.start_game(None)        
+
+# game_service.set_player_ready("Pawel")
+# game_service.set_player_ready("Karolina")
+
+
+thread_counter = 0
+input_thread = threading.Thread(target=refresh_game_state)
+input_thread.daemon = True
+input_thread.start()
+time.sleep(0.1)
+while not game_service.game.finished:
+    if game_state:
+        game_state_old = game_state
+        game_state = game_service.get_game_state(None)
+        if game_state_old.hash_value != game_state.hash_value:
+            if game_state.state == "Waiting":
+                print_ready_players_and_results(game_state)
+            else:
+                print_game_state(game_state)
+
+    refresh_player_command()
+    
+
+    # if game_state.current_player == game_service.my_player.name or not game_state.current_player and not my_player.ready:
+    #     while True:
+    #         command = input(print_player_actions(game_service.get_available_actions(my_player))).strip()
+    #         if command == 'exit':
+    #             os._exit(1)
+    #         result = game_service.player_action(command, my_player.name)
+    #         if result['result'] == 'ERROR':
+    #             print("ERROR: " + result['error_message'])
+    #         if result['result'] == 'OK':
+    #             break
+
+print_game_state(game_service.get_game_state(None))
+
+for r in game_service.game.get_game_results():
+    print(r["Name"] + " " + r["Best hand"][0] + " " + r["Best hand"][1])
 

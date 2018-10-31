@@ -47,7 +47,7 @@ class Game():
         if params['Action name'] == 'All in':
             result = self.current_player.all_in()        
         if params['Action name'] == 'Confirm ready':
-            result = self.set_player_ready(params["Player"].name)
+            result = self.set_player_ready(params["Player"])
             return result
             
         if result['result'] == 'OK':
@@ -88,8 +88,12 @@ class Game():
             return available_action_helper.get_available_actions(self.players, self.current_player, my_player)
         return None
 
-    def set_player_ready(self, name):
-        player = list(filter(lambda p: p.name == name, self.players))[0]
+    def set_player_ready(self, input_player):
+        if isinstance(input_player,Player):
+            player_name = input_player.name
+        else:
+            player_name = input_player
+        player = list(filter(lambda p: p.name == player_name, self.players))[0]
         player.ready = True
         if all(map(lambda p: p.ready, self.players)):
             self.initialize_round()
@@ -167,7 +171,9 @@ class Game():
 
 
     def add_player(self, name):
-        self.players.append(Player(name))
+        player = Player(name)
+        self.players.append(player)
+        return player
 
     def get_player(self, name):
         return list(filter(lambda p: p.name == name, self.players))[0]

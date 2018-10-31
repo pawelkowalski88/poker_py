@@ -33,7 +33,8 @@ class GameServiceLocal():
 
     def add_player(self, params):
         # self.game.add_player(params["player name"])
-        self.game.add_player(params)
+        self.my_player = self.game.add_player(params)
+        return self.my_player
 
     def start_game(self, params):
         self.game.initialize_round()
@@ -44,13 +45,16 @@ class GameServiceLocal():
     def set_player_ready(self, params):
         return self.game.set_player_ready(params)
 
-    def player_action(self, cmd):
-        command_parser = command.CommandParser(self.game_state.available_actions)
-        return command_parser.parse_and_exetute(cmd, self.game.player_action, self.my_player)
+    def player_action(self, cmd, player):
+        command_parser = command.CommandParser(self.get_available_actions(player))
+        return command_parser.parse_and_exetute(cmd, self.game.player_action, player)
 
     def get_game_results(self):
         result = self.game.game_results_rich
         return result
+
+    def get_available_actions(self, player):
+        return self.game.get_current_available_actions(player)
 
 
     # def hash_list(self, input_list):
