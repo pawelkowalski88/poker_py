@@ -1,6 +1,7 @@
 import requests
 from table import Table
 from card import Card
+from player import Player
 import json
 from collections import namedtuple
 from jsonconvert import JsonConvert
@@ -11,19 +12,18 @@ class RemoteGameService():
         self.base_url = base_url
 
     def add_player(self, params):
-        player_data = {"Name": params}
-        request = requests.post(self.base_url + '/add_player', data=player_data)
-        result = request.json()
-        return result
+        request = requests.post(self.base_url + '/add_player', json={"Name": params})
+        result = request.text
+        return JsonConvert.FromJSON(result)
 
-    def get_game_state(self):
-        request = requests.get(self.base_url + '/game_state')
+    def get_game_state(self, player):
+        request = requests.post(self.base_url + '/game_state', json=player)
         data = request.text
         # result = json.loads(data, object_hook=lambda d: namedtuple('X', self.extract_fields(d.keys()))(*d.values()))
         result = JsonConvert.FromJSON(data)
         return result
 
-    def set_player_ready():
+    def set_player_ready(self):
         pass
 
     def extract_fields(self, field_names):
