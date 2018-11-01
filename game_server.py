@@ -26,9 +26,10 @@ def stop_server():
 def index():
     return "Python poker game."
 
-@app.route('/game_state')
+@app.route('/game_state', methods=['POST'])
 def get_game_state():
-    game_state = game_service.get_game_state(None)
+    content = request.get_json()
+    game_state = game_service.get_game_state(content)
     # return_game_state={
     #     "Table": list(map(lambda c: dict(c), game_state.table)),
     #     "Players": list(map(lambda p: dict(p), game_state.players)),
@@ -47,7 +48,7 @@ def post_player_action():
     content = request.get_json()
     # print(content["Action name"])
     # print(content["Action params"])
-    result = game_service.player_action(content["Action params"], "")
+    result = game_service.player_action(content["Action params"], content["Player"])
     return jsonify(result)
 
 @app.route('/set_player_ready', methods=['POST'])

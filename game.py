@@ -85,7 +85,9 @@ class Game():
 
     def get_current_available_actions(self, my_player):
         if self.current_player or my_player:
-            return available_action_helper.get_available_actions(self.players, self.current_player, my_player)
+            my_player = self.get_player(my_player)
+            result = available_action_helper.get_available_actions(self.players, self.current_player, my_player)
+            return result
         return None
 
     def set_player_ready(self, input_player):
