@@ -49,6 +49,7 @@ def print_player_actions(player_actions):
 
     return result
 
+
 def print_ready_players_and_results(game_state):
     print()
     table = game_state.table
@@ -73,6 +74,7 @@ def print_ready_players_and_results(game_state):
     for r in game_state.game_results.results:
         # print(r["name"] + " " + r["best_hand"]["name"] + " " + r["best_hand"]["value"])
         print(r["name"] + " " + r["best_hand"]["name"] + " " + r["best_hand"]["value"])
+
 
     print()
     print()
