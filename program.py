@@ -70,7 +70,8 @@ def print_ready_players_and_results(game_state):
     else:
         print("No players in game")
     print()
-    for r in game_state.game_results:
+    for r in game_state.game_results.results:
+        # print(r["name"] + " " + r["best_hand"]["name"] + " " + r["best_hand"]["value"])
         print(r["name"] + " " + r["best_hand"]["name"] + " " + r["best_hand"]["value"])
 
     print()

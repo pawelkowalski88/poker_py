@@ -5,6 +5,7 @@ from player import Player
 import json
 from collections import namedtuple
 from jsonconvert import JsonConvert
+from dummy import Dummy
 
 class RemoteGameService():
 
@@ -21,6 +22,8 @@ class RemoteGameService():
         data = request.text
         # result = json.loads(data, object_hook=lambda d: namedtuple('X', self.extract_fields(d.keys()))(*d.values()))
         result = JsonConvert.FromJSON(data)
+        if isinstance(result.game_results, Dummy):
+            result.game_results = None
         return result
 
     def set_player_ready(self):
@@ -30,4 +33,7 @@ class RemoteGameService():
         result = list(map(lambda f: f.replace(" ","_").lower(), field_names))
         return result
 
-    # def player_action
+    def player_action(self, command, player_name):
+        request = requests.post(self.base_url + '/player_action', json={"Action name": "Player action", "Action params": command, "Player": player_name})
+        return request.json()
+

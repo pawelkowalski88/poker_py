@@ -2,6 +2,8 @@ from card import Card
 from hand import Hand
 from hand_description import HandDescription
 from player import Player
+from game_results import GameResults
+from game_results_collection import GameResultsCollection
 from collections import Counter
 from itertools import groupby
 from table import Table
@@ -20,7 +22,7 @@ class Game():
         self.current_player = None
         self.round_no = 0
         self.game_results = []
-        self.game_results_rich = {}
+        self.game_results_rich = GameResultsCollection()
         self.small_blind = 5
         self.big_blind = 10
         self.pot = 0
@@ -54,6 +56,7 @@ class Game():
             self.check_game_state()
             if self.round_finished:
                 self.finish_round()
+                # results = self.get_game_results()
                 self.game_results_rich = self.get_game_results()
                 # self.initialize_round()
                 self.round_finished = False
@@ -158,14 +161,20 @@ class Game():
 
     def get_game_results(self):
         players_ranking = self.game_results
-        result = []
+        results = GameResultsCollection([])
         for group in players_ranking:
             for p in group:
-                result.append({"name": p.name,
+                # result = GameResults(p.name, 
+                #                     list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
+                #                     p.print_cards(), 
+                #                     p.cards.hands_list[0].as_name_and_value())
+
+                # results.results.append(result)
+                results.results.append({"name": p.name,
                 "hands": list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
                 "cards": p.print_cards(),
                 "best_hand": p.cards.hands_list[0].as_name_and_value()})    
-        return result
+        return results
 
     def create_results_ranking(self, players_tab):
         for p in players_tab:

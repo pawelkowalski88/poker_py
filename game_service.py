@@ -4,6 +4,7 @@ from game_state import GameState
 import command
 import hashlib
 import json
+from dummy import Dummy
 
 
 class GameServiceLocal():

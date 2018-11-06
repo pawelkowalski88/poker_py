@@ -39,7 +39,8 @@ def get_game_state():
     #     "Pot": game_state.pot,
     #     "Game results": game_state.game_results
     # }
-    return JsonConvert.ToJSON(game_state)
+    result = JsonConvert.ToJSON(game_state)
+    return result
     # return jsonify(return_game_state)
 
 

@@ -10,6 +10,8 @@ class JsonConvert(object):
                 return cls(**d)
         else:
             # Raise exception instead of silently returning None
+            if isinstance(d, dict):
+                return d
             raise ValueError('Unable to find a matching class for object: {!s}'.format(d))
      
     @classmethod
