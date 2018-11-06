@@ -2,6 +2,8 @@ from card import Card
 from hand import Hand
 from hand_description import HandDescription
 from player import Player
+from game_results import GameResults
+from game_results_collection import GameResultsCollection
 from collections import Counter
 from itertools import groupby
 from table import Table
@@ -20,7 +22,7 @@ class Game():
         self.current_player = None
         self.round_no = 0
         self.game_results = []
-        self.game_results_rich = {}
+        self.game_results_rich = GameResultsCollection()
         self.small_blind = 5
         self.big_blind = 10
         self.pot = 0
@@ -33,7 +35,7 @@ class Game():
 
 
     def player_action(self, params):
-        if not self.current_player.ready and not params['Action name'] == 'Confirm ready':
+        if not self.current_player and not params['Action name'] == 'Confirm ready':
             return {'result': 'ERROR', 'error_message': 'The game has not yet started'}
 
         result = {}
@@ -50,15 +52,16 @@ class Game():
         if params['Action name'] == 'All in':
             result = self.current_player.all_in()        
         if params['Action name'] == 'Confirm ready':
-            result = self.set_player_ready()
+            result = self.set_player_ready(params["Player"])
+            return result
             
-
         if result['result'] == 'OK':
             self.check_game_state()
             if self.round_finished:
                 self.finish_round()
+                # results = self.get_game_results()
                 self.game_results_rich = self.get_game_results()
-                self.initialize_round()
+                # self.initialize_round()
                 self.round_finished = False
         return result
 
@@ -80,23 +83,36 @@ class Game():
         while not (self.current_player and not self.current_player.folded and not self.current_player.all_in_state):
             if self.finished:
                 return
+              
             #if not self.current_player:
             self.new_loop()
 
         self.initialization = False
+
         return
 
-    def get_current_available_actions(self):
-        if self.current_player:
-            return available_action_helper.get_available_actions(self.players, self.current_player)
+    def get_current_available_actions(self, my_player):
+        if self.current_player or my_player:
+            my_player = self.get_player(my_player)
+            result = available_action_helper.get_available_actions(self.players, self.current_player, my_player)
+            return result
         return None
 
-    def set_player_ready(self):
-        self.current_player.ready = True
+    def set_player_ready(self, input_player):
+        if isinstance(input_player,Player):
+            player_name = input_player.name
+        else:
+            player_name = input_player
+        player = list(filter(lambda p: p.name == player_name, self.players))[0]
+        player.ready = True
+        if all(map(lambda p: p.ready, self.players)):
+            self.initialize_round()
+            self.round_finished = False
         return {'result':'OK'}
 
 
     def initialize_round(self):
+        self.started = True
         self.dealer.collect_cards(self.players)
         self.table.clear()
         self.dealer.generate_deck()
@@ -108,6 +124,7 @@ class Game():
         self.check_game_state()
 
     def finish_round(self):
+        self.current_player = None
         for p in self.players:
             self.pot += p.bet
             p.bet = 0
@@ -119,6 +136,7 @@ class Game():
         winner = self.game_results[0][0]
         print(winner.name)
         winner.balance += self.pot
+
         self.pot = 0 
 
         if self.no_starting < len(self.players) - 1:
@@ -129,6 +147,7 @@ class Game():
         self.no_playing = self.no_starting
         self.current_player = self.players[self.no_playing]
         self.initialization = True
+
 
         
     def check_betting_fished(self):
@@ -160,14 +179,20 @@ class Game():
 
     def get_game_results(self):
         players_ranking = self.game_results
-        result = []
+        results = GameResultsCollection([])
         for group in players_ranking:
             for p in group:
-                result.append({"Name": p.name,
-                "Hands": list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
-                "Cards": p.print_cards(),
-                "Best hand": p.cards.hands_list[0].as_name_and_value()})    
-        return result
+                # result = GameResults(p.name, 
+                #                     list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
+                #                     p.print_cards(), 
+                #                     p.cards.hands_list[0].as_name_and_value())
+
+                # results.results.append(result)
+                results.results.append({"name": p.name,
+                "hands": list(map(lambda h: h.as_name_and_value(),p.cards.hands_list)), 
+                "cards": p.print_cards(),
+                "best_hand": p.cards.hands_list[0].as_name_and_value()})    
+        return results
 
     def create_results_ranking(self, players_tab):
         for p in players_tab:
@@ -175,7 +200,9 @@ class Game():
 
 
     def add_player(self, name):
-        self.players.append(Player(name))
+        player = Player(name)
+        self.players.append(player)
+        return player
 
     def get_player(self, name):
         return list(filter(lambda p: p.name == name, self.players))[0]
