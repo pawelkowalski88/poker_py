@@ -29,6 +29,9 @@ class Game():
         self.max_bet = 0
         self.started = False
         self.round_finished = False
+        self.no_playing = 0
+        self.no_starting = 0
+        self.initialization = False
 
 
     def player_action(self, params):
@@ -63,7 +66,6 @@ class Game():
         return result
 
     def check_game_state(self):
-
         if self.check_number_of_players_left() == 1:
             self.round_finished = True
             return
@@ -75,15 +77,21 @@ class Game():
                 self.reset_betting_round()
                 if self.finished or self.round_finished:
                     return
-
-        self.current_player = self.get_next_player()
+        if not self.initialization:
+            self.current_player = self.get_next_player()
 
         while not (self.current_player and not self.current_player.folded and not self.current_player.all_in_state):
             if self.finished:
                 return
-            if not self.current_player:
-                self.new_loop()
-            self.current_player = self.get_next_player()
+            #if not self.current_player:
+            self.new_loop()
+
+        self.initialization = False
+
+#web-service-2
+#            if not self.current_player:
+#                self.new_loop()
+#            self.current_player = self.get_next_player()
         return
 
     def get_current_available_actions(self, my_player):
@@ -110,9 +118,12 @@ class Game():
         self.started = True
         self.dealer.collect_cards(self.players)
         self.table.clear()
+        self.dealer.generate_deck()
         self.dealer.deal_cards_to_players(self.players)
         self.round_no = 0
-        self.players_gen = self.players_generator()
+        self.initialization = True
+        self.check_game_state()
+        self.bet_blinds()
         self.check_game_state()
 
     def finish_round(self):
@@ -128,8 +139,21 @@ class Game():
         winner = self.game_results[0][0]
         print(winner.name)
         winner.balance += self.pot
-        self.pot = 0      
+
+        self.pot = 0 
+
+        if self.no_starting < len(self.players) - 1:
+            self.no_starting += 1 
+        else:
+            self.no_starting = 0
+
+        self.no_playing = self.no_starting
+        self.current_player = self.players[self.no_playing]
+        self.initialization = True
+
+#        self.pot = 0      
         self.started = False  
+
 
         
     def check_betting_fished(self):
@@ -204,18 +228,23 @@ class Game():
     def get_next_player(self):
         if self.finished:
             return None
-        try:
-            self.current_player = next(self.players_gen)
+        elif self.no_playing < len(self.players) - 1:
+            self.no_playing += 1
+            self.current_player = self.players[self.no_playing]
             return self.current_player
-        except:
-            return None
+        else:
+            self.no_playing = 0
+            self.current_player = self.players[self.no_playing]
+            return self.current_player
 
 
     def new_loop(self):
-        self.players_gen=self.players_generator()
+        self.no_playing = self.no_starting
+        self.current_player = self.players[self.no_playing]
 
     def reset_betting_round(self):
         self.new_loop()
+        self.initialization = True
         self.round_no += 1
         self.max_bet = 0
         if self.round_no > 3:
@@ -226,3 +255,20 @@ class Game():
             self.pot += p.bet
             p.bet = 0
             p.bet_placed = False
+
+    def bet_blinds(self):
+        result = None
+        result = self.current_player.place_bet(self.small_blind) 
+        if result['result'] == 'ERROR':
+            result = self.current_player.all_in()
+        if result['result'] == 'ERROR':
+            print("ERROR: " + result['error_message'])
+        self.get_next_player()
+        result = self.current_player.place_bet(self.big_blind) 
+        if result['result'] == 'ERROR':
+            result = self.current_player.all_in()
+        if result['result'] == 'ERROR':
+            print("ERROR: " + result['error_message'])
+        self.get_next_player()
+        self.initialization = True
+
