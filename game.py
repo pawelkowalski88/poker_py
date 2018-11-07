@@ -83,8 +83,8 @@ class Game():
         while not (self.current_player and not self.current_player.folded and not self.current_player.all_in_state):
             if self.finished:
                 return
-            #if not self.current_player:
-            self.new_loop()
+            if not self.current_player:
+                self.new_loop()
 
         self.initialization = False
 
@@ -122,6 +122,7 @@ class Game():
         self.dealer.deal_cards_to_players(self.players)
         self.round_no = 0
         self.initialization = True
+        self.current_player = self.players[self.no_playing]
         self.check_game_state()
         self.bet_blinds()
         self.check_game_state()
@@ -132,6 +133,8 @@ class Game():
             self.pot += p.bet
             p.bet = 0
             p.ready = False
+            if p.balance == 0:
+                p.active = False
         results_groups  = self.check_game_results()
         self.game_results = []
         for key, group in results_groups:
@@ -148,7 +151,7 @@ class Game():
             self.no_starting = 0
 
         self.no_playing = self.no_starting
-        self.current_player = self.players[self.no_playing]
+        #self.current_player = self.players[self.no_playing]
         self.initialization = True
 
 #        self.pot = 0      
