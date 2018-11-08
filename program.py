@@ -13,6 +13,7 @@ stop_refreshing = False
 game_state_refreshed = False
 
 def print_game_state(game_state):
+    clear_screen()
     print()
     print()
     table = game_state.table
@@ -51,6 +52,7 @@ def print_player_actions(player_actions):
 
 
 def print_ready_players_and_results(game_state):
+    clear_screen()
     print()
     table = game_state.table
     players = game_state.players
@@ -83,6 +85,8 @@ def print_ready_players_and_results(game_state):
         print(p.name + " " + player_ready_as_str(p.ready))
     print()
 
+def clear_screen():
+    print("\033[H\033[J")
 
 def player_ready_as_str(ready):
     if ready:
@@ -127,6 +131,7 @@ def refresh_game_state():
   
 
 while True:
+    clear_screen()
     game_mode = input("Host - H, Join - J, Exit - E:")
     if game_mode.lower() == "h":
         game_service = GameServiceLocal()
@@ -153,8 +158,8 @@ time.sleep(0.1)
 while True:
     refresh_player_command()
     
-print_game_state(game_service.get_game_state(None))
+# print_game_state(game_service.get_game_state(None))
 
-for r in game_service.game.get_game_results():
-    print(r["Name"] + " " + r["Best hand"][0] + " " + r["Best hand"][1])
+# for r in game_service.game.get_game_results():
+#     print(r["Name"] + " " + r["Best hand"][0] + " " + r["Best hand"][1])
 

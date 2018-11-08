@@ -276,3 +276,16 @@ class Game():
         self.get_next_player()
         self.initialization = True
 
+
+    def get_players(self, my_player):
+        result = []
+        for p in self.players:
+            new_p = Player(name=p.name, balance=p.balance, bet=p.bet, bet_placed=p.bet_placed,
+                active=p.active, folded=p.folded, all_in_state=p.all_in_state, ready=p.ready)
+            if p.name == my_player:
+                new_p.cards = p.cards
+            else:
+                new_p.cards = Hand(cards=[Card(covered=True), Card(covered=True)])
+            result.append(new_p)
+        return result
+

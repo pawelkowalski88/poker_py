@@ -57,49 +57,6 @@ class GameServiceLocal():
     def get_available_actions(self, player):
         return self.game.get_current_available_actions(player)
 
-
-
-    # def hash_list(self, input_list):
-    #     result = ""
-    #     for subval in input_list:
-    #         if isinstance(subval, dict):
-    #             result += self.hash_dict(subval)
-    #         elif isinstance(subval, Jsonable):
-    #             result += self.hash_dict(dict(subval))
-    #         else:
-    #             result += str(subval)
-    #     return result
-
-    # def hash_dict(self, input_dict):
-    #     result = ""
-    #     for attr, value in input_dict.items():
-    #         result+=attr
-    #         if isinstance(value, list):
-    #             result += self.hash_list(value)
-    #         elif isinstance(value, dict):
-    #             result += self.hash_dict(value)            
-    #         elif isinstance(value, Jsonable):
-    #             result += self.hash_dict(dict(value))
-    #         else:
-    #             result += str(value)
-    #     return result
-
-    # def hash_game_state(self):
-    #     return 0
-        # result = ""
-        # for attr, value in self.game_state.items():
-        #     result+=attr
-        #     if isinstance(value, list):
-        #         result += self.hash_list(value)
-        #     elif isinstance(value, dict):
-        #         result += self.hash_dict(value)
-        #     elif isinstance(value, Jsonable):
-        #         result += self.hash_dict(dict(value))
-        #     else:
-        #         result += str(value)
-        # return result
-
-
     def get_game_state(self, params):
         if self.game.current_player:
             current_player_name = self.game.current_player.name
@@ -112,23 +69,13 @@ class GameServiceLocal():
             self.game_state = GameState(
                 "Started",
                 self.game.table,
-                self.game.players,
+                self.game.get_players(my_player),
                 current_player_name,
                 self.game.get_current_available_actions(my_player),
                 self.game.round_no,
                 self.game.pot,
                 None
             )
-            # self.game_state={
-            #     "state": "Started",
-            #     "table": self.game.table,
-            #     "players": self.game.players,
-            #     "current_player": self.game.current_player.name,
-            #     "available_actions": self.game.get_current_available_actions(),
-            #     "round_no": self.game.round_no,
-            #     "pot": self.game.pot,
-            #     "game_results": {}
-            # }
         if not self.game.started:
             self.game_state = GameState(
                 state = "Waiting",
@@ -140,19 +87,6 @@ class GameServiceLocal():
                 pot = self.game.pot,
                 game_results = self.get_game_results()
             )
-            # self.game_state={
-            #     "state": "Waiting",
-            #     "table": {},
-            #     "players": self.game.players,
-            #     "current_player": {},
-            #     "available_actions": {},
-            #     "round_no": {},
-            #     "pot": {},
-            #     "game_results": self.get_game_results()
-            # }
-
-        # hash_value = self.hash_game_state()
-        # self.game_state["hash_value"] = hashlib.md5(hash_value.encode('utf-8')).hexdigest()
 
         return self.game_state
     
