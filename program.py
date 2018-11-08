@@ -123,7 +123,7 @@ def refresh_game_state():
                 if game_state.current_player == my_player.name or not game_state.current_player and not my_player.ready:  
                     print(print_player_actions(game_state.available_actions))
             game_state_refreshed = True
-        time.sleep(1)
+        time.sleep(0.5)
   
 
 while True:

@@ -85,6 +85,7 @@ class Game():
                 return
             if not self.current_player:
                 self.new_loop()
+            self.current_player = self.get_next_player()
 
         self.initialization = False
 
