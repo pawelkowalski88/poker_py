@@ -45,10 +45,12 @@ def print_game_state(game_state):
 
 def print_player_actions(player_actions):
     result = ""
-    for a in player_actions:
-        result += a.name + " - " + a.key + " "
+    if player_actions:
+        for a in player_actions:
+            result += a.name + " - " + a.key + " "
 
-    return result
+        return result
+    return ""
 
 
 def print_ready_players_and_results(game_state):
@@ -69,7 +71,8 @@ def print_ready_players_and_results(game_state):
     if players:
         print("Players in game:")
         for p in players:
-            print(p)
+            if p.active:
+                print(p)
     else:
         print("No players in game")
     print()
@@ -82,34 +85,41 @@ def print_ready_players_and_results(game_state):
     print()
 
     for p in game_state.players:
-        print(p.name + " " + player_ready_as_str(p.ready))
+        if p.active:
+            print(p.name + " " + player_ready_as_str(p.ready, p.active))
     print()
 
 def clear_screen():
     print("\033[H\033[J")
 
-def player_ready_as_str(ready):
-    if ready:
-        return "Ready"
-    return "Not ready"
+def player_ready_as_str(ready, active):
+    if active:
+        if ready:
+            return "Ready"
+        return "Not ready"
+    else:
+        return "Out"
 
 def refresh_player_command():
     global game_state_refreshed
     global stop_refreshing               
     if game_state_refreshed:
         if game_state.current_player == my_player.name or not game_state.current_player and not my_player.ready:  
-            while True:    
-                command = input("").strip()
-                stop_refreshing = True
-                game_state_refreshed = False
-                if command == 'exit':
-                    os._exit(1)
-                result = game_service.player_action(command, my_player.name)
-                if result['result'] == 'ERROR':
-                    print("ERROR: " + result['error_message'])
-                if result['result'] == 'OK':
-                    stop_refreshing = False
-                    break  
+            while True:
+                if game_state.available_actions:
+                    command = input("").strip()
+                    stop_refreshing = True
+                    game_state_refreshed = False
+                    if command == 'exit':
+                        os._exit(1)
+                    result = game_service.player_action(command, my_player.name)
+                    if result['result'] == 'ERROR':
+                        print("ERROR: " + result['error_message'])
+                    if result['result'] == 'OK':
+                        stop_refreshing = False
+                        break  
+                else:
+                    break
 
 def refresh_game_state():
     global game_state
@@ -122,6 +132,12 @@ def refresh_game_state():
             if game_state_old.hash_value != game_state.hash_value:
                 if game_state.state == "Waiting":
                     print_ready_players_and_results(game_state)
+                elif game_state.state == "Finished":
+                    print_ready_players_and_results(game_state)
+                    print("GAME OVER")
+                    active_players = list(filter(lambda p: p.balance > 0, game_state.players))
+                    print("The winner is " + active_players[0].name)
+                    return
                 else:
                     print_game_state(game_state)
                 if game_state.current_player == my_player.name or not game_state.current_player and not my_player.ready:  
@@ -155,8 +171,14 @@ input_thread.start()
 time.sleep(0.1)
 
 # while not game_service.game.finished:
+
 while True:
     refresh_player_command()
+    if game_state.state == "Finished":
+        stop_refreshing = True
+        if isinstance(game_service, RemoteGameService):
+            print("Connection to server terminated")
+            break
     
 # print_game_state(game_service.get_game_state(None))
 

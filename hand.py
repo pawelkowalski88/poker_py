@@ -23,7 +23,8 @@ class Hand(object):
 
     def find_hands(self):
         # hands = []
-        all_cards = (self.cards+self.cards_on_table)
+        if self.cards:
+            all_cards = (self.cards+self.cards_on_table)
 
         self.pairs_threes_fours(self.hands_list, all_cards)
         self.find_flush(self.hands_list,all_cards)

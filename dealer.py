@@ -20,9 +20,14 @@ class Dealer():
 
     def deal_cards_to_players(self, players):
         for p in players:
-            p.cards = Hand(self.table, [], [])
-            p.add_card(self.pick_a_card())
-            p.add_card(self.pick_a_card())
+            if p.balance == 0:
+                players.remove(p)
+                p.active = False
+        for p in players:
+            if p.active:
+                p.cards = Hand(self.table, [], [])
+                p.add_card(self.pick_a_card())
+                p.add_card(self.pick_a_card())
 
     def collect_cards(self, players):
         for p in players:

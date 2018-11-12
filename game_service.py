@@ -76,7 +76,7 @@ class GameServiceLocal():
                 self.game.pot,
                 None
             )
-        if not self.game.started:
+        elif not self.game.finished:
             self.game_state = GameState(
                 state = "Waiting",
                 table = self.game.table,
@@ -87,6 +87,18 @@ class GameServiceLocal():
                 pot = self.game.pot,
                 game_results = self.get_game_results()
             )
+        else:
+            self.game_state = GameState(
+                state = "Finished",
+                table = self.game.table,
+                players = self.game.players,
+                current_player = current_player_name,
+                available_actions = [],
+                round_no = self.game.round_no,
+                pot = self.game.pot,
+                game_results = self.get_game_results()
+            )
+
 
         return self.game_state
     

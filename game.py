@@ -66,7 +66,7 @@ class Game():
         return result
 
     def check_game_state(self):
-        if self.check_number_of_players_left() == 1:
+        if self.check_number_of_players_left() == 1 and self.started:
             self.round_finished = True
             return
 
@@ -80,7 +80,7 @@ class Game():
         if not self.initialization:
             self.current_player = self.get_next_player()
 
-        while not (self.current_player and not self.current_player.folded and not self.current_player.all_in_state):
+        while not (self.current_player and not self.current_player.folded and not self.current_player.all_in_state and self.current_player.active):
             if self.finished:
                 return
             if not self.current_player:
@@ -98,8 +98,9 @@ class Game():
     def get_current_available_actions(self, my_player):
         if self.current_player or my_player:
             my_player = self.get_player(my_player)
-            result = available_action_helper.get_available_actions(self.players, self.current_player, my_player)
-            return result
+            if my_player:
+                result = available_action_helper.get_available_actions(self.players, self.current_player, my_player)
+                return result
         return None
 
     def set_player_ready(self, input_player):
@@ -109,7 +110,7 @@ class Game():
             player_name = input_player
         player = list(filter(lambda p: p.name == player_name, self.players))[0]
         player.ready = True
-        if all(map(lambda p: p.ready, self.players)):
+        if all(map(lambda p: p.ready or not p.active, self.players)):
             self.initialize_round()
             self.round_finished = False
         return {'result':'OK'}
@@ -134,17 +135,26 @@ class Game():
             self.pot += p.bet
             p.bet = 0
             p.ready = False
-            if p.balance == 0:
-                p.active = False
+
         results_groups  = self.check_game_results()
         self.game_results = []
+
         for key, group in results_groups:
             self.game_results.append(list(group))
+
         winner = self.game_results[0][0]
         print(winner.name)
         winner.balance += self.pot
 
         self.pot = 0 
+
+        # for p in self.players:
+        #     if p.balance == 0:
+        #         self.players.remove(p)
+        #         p.active = False
+        active_players = list(filter(lambda p: p.balance > 0, self.players))
+        if len(active_players) == 1:
+            self.finished = True
 
         if self.no_starting < len(self.players) - 1:
             self.no_starting += 1 
@@ -152,10 +162,8 @@ class Game():
             self.no_starting = 0
 
         self.no_playing = self.no_starting
-        #self.current_player = self.players[self.no_playing]
         self.initialization = True
-
-#        self.pot = 0      
+  
         self.started = False  
 
 
@@ -215,7 +223,10 @@ class Game():
         return player
 
     def get_player(self, name):
-        return list(filter(lambda p: p.name == name, self.players))[0]
+        try:
+            return list(filter(lambda p: p.name == name, self.players))[0]
+        except:
+            return None
 
     def create_default_players(self, number_of_players):
         players_tab = []

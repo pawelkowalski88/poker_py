@@ -59,7 +59,7 @@ def all_in_available(players, current_player, my_player):
     return False
 
 def confirm_ready_available(players, current_player, my_player):
-    if not my_player.ready:
+    if not my_player.ready and my_player.active:
         return True
     return False
 

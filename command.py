@@ -12,6 +12,8 @@ class CommandParser():
             cmd = next(filter(lambda a: a.key.lower() == elements[0], self.available_commands))
         except (StopIteration):
             return {"result": "ERROR", "error_message": "No such command!"}
+        except (TypeError):
+            return {"result": "ERROR", "error_message": "Internal error"}
 
         if cmd.has_value:
             if len(elements) > 1:
