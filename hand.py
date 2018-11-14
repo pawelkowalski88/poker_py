@@ -36,6 +36,8 @@ class Hand(object):
         for key, value in hands_count.items():
             if value==2 and key=='Pair':
                 self.hands_list.append(HandDescription('Two pairs', None, None))
+            if value==3 and key=='Pair':
+                self.hands_list.append(HandDescription('Two pairs', None, None))
 
         if "Pair" in hand_name_list and "Three of a kind" in hand_name_list:
                 self.hands_list.append(HandDescription('Full house', None, None))
