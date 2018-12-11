@@ -5,13 +5,15 @@ class CommandParser():
     def __init__(self, available_commands):
         self.available_commands = available_commands
 
-    def parse_and_exetute(self, command: str, function):
+    def parse_and_exetute(self, command: str, function, player=None):
         elements = command.split(' ')
 
         try:
             cmd = next(filter(lambda a: a.key.lower() == elements[0], self.available_commands))
         except (StopIteration):
             return {"result": "ERROR", "error_message": "No such command!"}
+        except (TypeError):
+            return {"result": "ERROR", "error_message": "Internal error"}
 
         if cmd.has_value:
             if len(elements) > 1:
@@ -24,7 +26,7 @@ class CommandParser():
             else:
                 value = None
         
-        return function({"Action name": cmd.name, "Value": value})
+        return function({"Action name": cmd.name, "Value": value, "Player": player})
 
 
     def execute(self, params):
@@ -40,7 +42,3 @@ player_actions = [
     PlayerAction("All in", "A", False),
     PlayerAction("Confirm ready", "Y", False)
 ]
-cmd = CommandParser(player_actions)
-
-result = cmd.parse_and_exetute("b 100", cmd.execute)
-print(result)

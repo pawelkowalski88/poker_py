@@ -2,12 +2,14 @@
 from card import Card
 from hand_description import HandDescription
 from collections import Counter
+from jsonconvert import JsonConvert
 
-class Hand():
-    def __init__(self, cards_on_table):
-        self.cards = []
+@JsonConvert.register
+class Hand(object):
+    def __init__(self, cards_on_table=None, cards=[], hands_list=[]):
+        self.cards = cards
         self.cards_on_table = cards_on_table
-        self.hands_list = []
+        self.hands_list = hands_list
 
     def print_cards(self, all=True):
         # print("Cards:")
@@ -21,7 +23,8 @@ class Hand():
 
     def find_hands(self):
         # hands = []
-        all_cards = (self.cards+self.cards_on_table)
+        if self.cards:
+            all_cards = (self.cards+self.cards_on_table)
 
         self.pairs_threes_fours(self.hands_list, all_cards)
         self.find_flush(self.hands_list,all_cards)
