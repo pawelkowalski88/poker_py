@@ -1,4 +1,4 @@
-from game_service import GameServiceLocal
+gitfrom game_service import GameServiceLocal
 from game_state import GameState
 from player import Player
 import os, time, hashlib
@@ -154,7 +154,8 @@ while True:
         game_service.setup_api()
         break
     elif game_mode.lower() == "j":
-        game_service = RemoteGameService("http://localhost:5000")
+        ip_address = input("Input host IP address:")
+        game_service = RemoteGameService("http://" + ip_address + ":5000")
         break
     elif game_mode.lower() == "e":
         os._exit(1)

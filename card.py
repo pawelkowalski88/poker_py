@@ -1,12 +1,16 @@
 # Playing card class
-from colorama import Fore,Back, Style, init
+from colorama import Fore, Back, Style, init
 from jsonconvert import JsonConvert
 
 init(convert=True)
 
+
 def card_to_int(val):
-    if val in range(2,11):
-        
+    """Converts card figure (2-10, J, Q, K, A) into integer for comparison.
+    :param val: Card figure.
+    :return:Card figure int representation.
+    """
+    if val in range(2, 11):
         return int(val)
     if val == 'J':
         return 11
@@ -18,8 +22,10 @@ def card_to_int(val):
         return 14
     return ValueError
 
-def from_dict(self, source):
+
+def from_dict(source):
         return Card(source["figure"], source["color"])
+
 
 @JsonConvert.register
 class Card(object):
@@ -39,10 +45,8 @@ class Card(object):
         else:
             return '|'+Fore.RED+str(self.figure)+self.color+Style.RESET_ALL+'|'
 
-
     def __int__(self):
         return card_to_int(self.figure)
-
 
     def __gt__(self, other):
         if isinstance(other, Card):
@@ -62,4 +66,3 @@ class Card(object):
             return 'X'
         else:
             return str(self.figure)
-        

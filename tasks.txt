@@ -1,0 +1,6 @@
+- zapisywanie/wczytywanie stanu gry
+- zaznajomic z plikami markdown
+- historia stanów gry
+- kilka stolów
+- api w GO
+- wrzucic w chmure dzialajaca aplikacje
