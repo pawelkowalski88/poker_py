@@ -1,4 +1,4 @@
-gitfrom game_service import GameServiceLocal
+from game_service import GameServiceLocal
 from game_state import GameState
 from player import Player
 import os, time, hashlib
