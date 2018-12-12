@@ -135,38 +135,3 @@ class Hand(object):
         """
         if isinstance(other, Hand):
             return self.hands_list > other.hands_list
-
-
-
-# table = [Card(10, '♠'), Card(6, '♠'), Card(7, '♠')]
-# hand = Hand(table)
-# hand.cards.append(Card(8, '♠'))
-# hand.cards.append(Card(9, '♠'))
-
-# print(hand.print_cards())
-
-# print(list(map(lambda h: str(h.hand_name) + ' ' + str(h.value), hand.find_hands())))
-
-
-
-            
-
-        # all_cards.sort(key=lambda c: int(c), reverse=True)
-        # all_cards_str = ''.join(list(map(lambda c: c.print_value(), all_cards)))
-        # print(all_cards_str)
-
-        # p = re.compile(r'(\w){3}')
-        # print(p.findall(all_cards_str))
-
-
-    # def high_card(self):
-    #     all_cards = self.cards + self.cards_on_table
-    #     return HandDescription('High card', max(all_cards).figure, self.print_cards([max(all_cards)]))
-
-    # def pair_triple_quad(self):
-    #     all_cards = self.cards + self.cards_on_table
-    #     card_count = Counter(map(lambda c: c.figure, all_cards)).most_common(1)
-        
-    #     if (card_count[0][1] == 2):
-    #         returned_cards = list(filter(lambda c: card_count[0][0] == c.figure, all_cards))
-    #         return HandDescription('Pair', card_count[0][0], self.print_cards(returned_cards))
