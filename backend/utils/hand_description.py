@@ -1,19 +1,20 @@
-from card import card_to_int
-from jsonconvert import JsonConvert
+from backend.utils.card import card_to_int
+from backend.utils.jsonconvert import JsonConvert
 
 hand_ranking = {
-"High card": 1,
-"Pair": 2,
-"Two pairs": 3,
-"Three of a kind": 4,
-"Straight": 5,
-"Flush": 6,
-"Full house": 7,
-"Four of a kind": 8,
-"Straight flush": 9}
+    "High card": 1,
+    "Pair": 2,
+    "Two pairs": 3,
+    "Three of a kind": 4,
+    "Straight": 5,
+    "Flush": 6,
+    "Full house": 7,
+    "Four of a kind": 8,
+    "Straight flush": 9}
+
 
 @JsonConvert.register
-class HandDescription():
+class HandDescription:
 
     def __init__(self, hand_name="", value="", returned_cards=None):
         self.hand_name = hand_name
@@ -47,5 +48,3 @@ class HandDescription():
         if self.value:
             return {"name": self.hand_name, "value": str(self.value)}
         return {"name": self.hand_name, "value": ""}
-
-                

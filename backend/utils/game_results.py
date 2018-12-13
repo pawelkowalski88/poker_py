@@ -1,4 +1,4 @@
-class GameResults():
+class GameResults:
 
     def __init__(self, name, hands, cards, best_hand):
         self.name = name

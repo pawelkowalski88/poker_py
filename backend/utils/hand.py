@@ -1,8 +1,8 @@
-#Represents a poker hand (Royal flush, staright flush, etc.)
-from card import Card
-from hand_description import HandDescription
+# Represents a poker hand (Royal flush, staright flush, etc.)
 from collections import Counter
-from jsonconvert import JsonConvert
+from backend.utils.hand_description import HandDescription
+from backend.utils.jsonconvert import JsonConvert
+
 
 @JsonConvert.register
 class Hand(object):
@@ -44,7 +44,6 @@ class Hand(object):
                 self.hands_list.append(HandDescription('Pokier', None, None))
 
         self.sort_my_hands()
-        #return hands
 
     def pairs_threes_fours(self, hands_list, cards_list):
         card_counts = Counter(map(lambda c: c.figure, cards_list))

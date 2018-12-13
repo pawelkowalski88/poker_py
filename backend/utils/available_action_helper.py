@@ -1,5 +1,5 @@
-from player import Player
-from jsonconvert import JsonConvert
+from backend.utils.jsonconvert import JsonConvert
+
 
 def check_available(players, current_player, my_player):
     if not current_player:
@@ -11,12 +11,14 @@ def check_available(players, current_player, my_player):
         return True
     return False
 
+
 def fold_available(players, current_player, my_player):
     if not current_player:
         return False
     if not current_player.ready:
         return False
     return True
+
 
 def bet_available(players, current_player, my_player):
     if not current_player:
@@ -28,6 +30,7 @@ def bet_available(players, current_player, my_player):
         return True
     return False
 
+
 def raise_available(players, current_player, my_player):
     if not current_player:
         return False
@@ -37,6 +40,7 @@ def raise_available(players, current_player, my_player):
     if max_bet > 0 and max_bet < current_player.balance + current_player.bet:
         return True
     return False
+
 
 def call_available(players, current_player, my_player):
     if not current_player:
@@ -48,6 +52,7 @@ def call_available(players, current_player, my_player):
         return True
     return False
 
+
 def all_in_available(players, current_player, my_player):
     if not current_player:
         return False
@@ -58,10 +63,12 @@ def all_in_available(players, current_player, my_player):
         return True
     return False
 
+
 def confirm_ready_available(players, current_player, my_player):
     if not my_player.ready and my_player.active:
         return True
     return False
+
 
 class PlayerActionAvailability():
 
@@ -73,6 +80,7 @@ class PlayerActionAvailability():
 
     def to_player_action(self):
         return PlayerAction(self.name, self.key, self.has_value)
+
 
 @JsonConvert.register
 class PlayerAction():

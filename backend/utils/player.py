@@ -1,8 +1,7 @@
-#Player class
-from card import Card
-from hand import Hand
-from table import Table
-from jsonconvert import JsonConvert
+# Player class
+from backend.utils.hand import Hand
+from backend.utils.jsonconvert import JsonConvert
+
 
 @JsonConvert.register
 class Player(object):

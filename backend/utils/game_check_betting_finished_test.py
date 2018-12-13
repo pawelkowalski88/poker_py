@@ -1,11 +1,12 @@
 import unittest
-from game import Game
-from player import Player
+from backend.utils.game import Game
+from backend.utils.player import Player
+
 
 class TestGame(unittest.TestCase):
 
     def test_check_betting_fished_all_200_true(self):
-        #Arrange
+        # Arrange
         game = Game()
         game.add_player(Player("Pawel"))
         game.add_player(Player("Karolina"))
@@ -14,10 +15,10 @@ class TestGame(unittest.TestCase):
         game.players[0].bet_placed = True
         game.players[1].bet_placed = True
 
-        #Act(?)
+        # Act(?)
         result = game.check_betting_fished()
 
-        #Assert
+        # Assert
         self.assertEqual(result, True)
 
     def test_check_betting_fished_false(self):

@@ -1,7 +1,7 @@
 import unittest
-from available_action_helper import check_available, fold_available, call_available, bet_available, all_in_available
-from player import Player
-from game import Game
+from backend.utils.available_action_helper import check_available, fold_available, call_available, bet_available, all_in_available
+from backend.utils.player import Player
+
 
 class TestClass(unittest.TestCase):
     def test_check_available_true(self):

@@ -1,6 +1,7 @@
-from jsonconvert import JsonConvert
+from backend.utils.jsonconvert import JsonConvert
+
 
 @JsonConvert.register
-class Dummy():
+class Dummy:
     def __init__(self):
         pass

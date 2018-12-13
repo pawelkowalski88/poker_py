@@ -1,13 +1,9 @@
 import requests
-from table import Table
-from card import Card
-from player import Player
-import json
-from collections import namedtuple
-from jsonconvert import JsonConvert
-from dummy import Dummy
+from backend.utils.jsonconvert import JsonConvert
+from backend.utils.dummy import Dummy
 
-class RemoteGameService():
+
+class RemoteGameService:
 
     def __init__(self, base_url):
         self.base_url = base_url

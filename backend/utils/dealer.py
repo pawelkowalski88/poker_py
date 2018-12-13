@@ -1,8 +1,6 @@
-from card import Card
-from table import Table
-from hand import Hand
 import random
-
+from backend.utils.card import Card
+from backend.utils.hand import Hand
 
 
 class Dealer():

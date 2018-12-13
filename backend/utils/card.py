@@ -1,6 +1,6 @@
 # Playing card class
-from colorama import Fore,Back, Style, init
-from jsonconvert import JsonConvert
+from colorama import Fore, Style, init
+from backend.utils.jsonconvert import JsonConvert
 
 init(convert=True)
 

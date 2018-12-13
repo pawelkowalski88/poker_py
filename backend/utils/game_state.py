@@ -1,6 +1,6 @@
-from jsonconvert import JsonConvert
-from table import Table
 import hashlib
+from backend.utils.jsonconvert import JsonConvert
+
 
 @JsonConvert.register
 class GameState(object):
@@ -24,8 +24,5 @@ class GameState(object):
         return GameState("", None, None, "", None, 0, 0, None)
 
     def calculate_hash_value(self):
-        asJson = JsonConvert.ToJSON(self)
-        return hashlib.md5(asJson.encode('utf-8')).hexdigest()
-        #return 1
-
-    
+        as_json = JsonConvert.ToJSON(self)
+        return hashlib.md5(as_json.encode('utf-8')).hexdigest()

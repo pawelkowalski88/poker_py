@@ -6,23 +6,27 @@ import threading
 import time
 import atexit
 import logging
-from jsonconvert import JsonConvert
+from backend.utils.jsonconvert import JsonConvert
 
 game_service: GameServiceLocal = None
 app = Flask(__name__)
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
+
 def start_server():
     print('Server module running.')
     app.run(host='127.0.0.1', port=5000)
 
+
 def stop_server():
     print('Stopping server')
+
 
 @app.route('/')
 def index():
     return "Python poker game."
+
 
 @app.route('/game_state', methods=['POST'])
 def get_game_state():
@@ -50,18 +54,21 @@ def post_player_action():
     result = game_service.player_action(content["Action params"], content["Player"])
     return jsonify(result)
 
+
 @app.route('/set_player_ready', methods=['POST'])
 def set_player_ready():
     content = request.get_json()
     result = game_service.set_player_ready(content['Name'])
     return jsonify(result)
 
+
 @app.route('/add_player', methods=['POST'])
 def add_player():
     content = request.get_json()
     result = game_service.add_player(content['Name'])
     return JsonConvert.ToJSON(result)
-    
+
+
 atexit.register(stop_server)
 server_thread = threading.Thread(target=start_server)
 server_thread.daemon = True

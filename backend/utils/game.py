@@ -1,10 +1,10 @@
-from card import Card
-from hand import Hand
-from player import Player
-from game_results_collection import GameResultsCollection
 from itertools import groupby
+from backend.utils.card import Card
+from backend.utils.hand import Hand
+from backend.utils.player import Player
+from backend.utils.game_results_collection import GameResultsCollection
 from backend.utils.dealer import Dealer
-import available_action_helper
+import backend.utils.available_action_helper as available_action_helper
 
 
 class Game():
@@ -68,7 +68,8 @@ class Game():
 
         if self.check_betting_fished():
             self.reset_betting_round()
-            #goes through all the round till the end in case there is one player still betting (the rest either folded or went all-in)
+            # goes through all the round till the end in case there is one player still betting
+            # (the rest either folded or went all-in)
             while self.check_betting_fished():
                 self.reset_betting_round()
                 if self.finished or self.round_finished:

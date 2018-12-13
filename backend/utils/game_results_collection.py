@@ -1,4 +1,5 @@
-from jsonconvert import JsonConvert
+from backend.utils.jsonconvert import JsonConvert
+
 
 @JsonConvert.register
 class GameResultsCollection():

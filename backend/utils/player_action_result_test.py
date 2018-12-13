@@ -1,6 +1,6 @@
 import unittest
-from game import Game
-from player import Player
+from backend.utils.game import Game
+from backend.utils.player import Player
 
 
 # game_service = GameService()
@@ -21,7 +21,7 @@ class TestPlayerActions(unittest.TestCase):
         player.balance = 5000
         
         res = player.place_bet(200)
-        com = (res ==  {'result': 'OK'})
+        com = (res == {'result': 'OK'})
 
         self.assertEqual(com, True)
 

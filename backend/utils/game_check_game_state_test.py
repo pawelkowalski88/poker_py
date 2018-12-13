@@ -1,6 +1,6 @@
 import unittest
-from player import Player
-from game import Game
+from backend.utils.game import Game
+
 
 class TestClass(unittest.TestCase):
 
