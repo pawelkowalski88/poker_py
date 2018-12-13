@@ -23,11 +23,6 @@ def card_to_int(val):
     return ValueError
 
 
-# To be deleted probably.
-def from_dict(source):
-        return Card(source["figure"], source["color"])
-
-
 @JsonConvert.register
 class Card(object):
     """Represents a playing card.
@@ -89,14 +84,3 @@ class Card(object):
         if isinstance(other, Card):
             return int(self) == int(other)
         return NotImplemented
-
-    # To be deleted.
-    def __hash__(self):
-        return hash(self.figure)
-
-    # To be deleted.
-    def print_value(self):
-        if self.figure == 10:
-            return 'X'
-        else:
-            return str(self.figure)

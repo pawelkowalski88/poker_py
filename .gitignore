@@ -2,5 +2,5 @@ __pycache__/
 
 *.pyc
 .vscode/launch.json
-.idea/*
+.idea/
 .vscode/
