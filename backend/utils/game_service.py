@@ -1,10 +1,6 @@
 from game import Game
-from player import Player
 from game_state import GameState
-import command
-import hashlib
-import json
-from dummy import Dummy
+from backend.utils import command
 
 
 class GameServiceLocal():

@@ -1,13 +1,11 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
-from game import Game
-from game_service import GameServiceLocal
+from backend.utils.game_service import GameServiceLocal
 import threading
 import time
 import atexit
 import logging
-import json
 from jsonconvert import JsonConvert
 
 game_service: GameServiceLocal = None

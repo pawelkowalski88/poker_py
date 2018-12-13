@@ -1,16 +1,14 @@
-from game_service import GameServiceLocal
-from game_state import GameState
-from player import Player
-import os, time, hashlib
+import os
+import time
 import threading
-from remote_game_service import RemoteGameService
-
-# def get_game_state(game_service):
-#     return game_service.get_game_state(None)
+from backend.utils.remote_game_service import RemoteGameService
+from backend.utils.game_service import GameServiceLocal
+from backend.utils.game_state import GameState
 
 game_state = None
 stop_refreshing = False
 game_state_refreshed = False
+
 
 def print_game_state(game_state):
     clear_screen()
@@ -80,7 +78,6 @@ def print_ready_players_and_results(game_state):
         # print(r["name"] + " " + r["best_hand"]["name"] + " " + r["best_hand"]["value"])
         print(r["name"] + " " + r["best_hand"]["name"] + " " + r["best_hand"]["value"])
 
-
     print()
     print()
 
@@ -89,8 +86,10 @@ def print_ready_players_and_results(game_state):
             print(p.name + " " + player_ready_as_str(p.ready, p.active))
     print()
 
+
 def clear_screen():
     print("\033[H\033[J")
+
 
 def player_ready_as_str(ready, active):
     if active:
@@ -100,11 +99,12 @@ def player_ready_as_str(ready, active):
     else:
         return "Out"
 
+
 def refresh_player_command():
     global game_state_refreshed
-    global stop_refreshing               
+    global stop_refreshing
     if game_state_refreshed:
-        if game_state.current_player == my_player.name or not game_state.current_player and not my_player.ready:  
+        if game_state.current_player == my_player.name or not game_state.current_player and not my_player.ready:
             while True:
                 if game_state.available_actions:
                     command = input("").strip()
@@ -117,9 +117,10 @@ def refresh_player_command():
                         print("ERROR: " + result['error_message'])
                     if result['result'] == 'OK':
                         stop_refreshing = False
-                        break  
+                        break
                 else:
                     break
+
 
 def refresh_game_state():
     global game_state
@@ -140,11 +141,11 @@ def refresh_game_state():
                     return
                 else:
                     print_game_state(game_state)
-                if game_state.current_player == my_player.name or not game_state.current_player and not my_player.ready:  
+                if game_state.current_player == my_player.name or not game_state.current_player and not my_player.ready:
                     print(print_player_actions(game_state.available_actions))
             game_state_refreshed = True
         time.sleep(0.5)
-  
+
 
 while True:
     clear_screen()
@@ -159,7 +160,6 @@ while True:
     elif game_mode.lower() == "e":
         os._exit(1)
 game_state = GameState.empty_game_state()
-
 
 my_player_name = input("Please enter your name:")
 my_player = game_service.add_player(my_player_name)
@@ -179,9 +179,8 @@ while True:
         if isinstance(game_service, RemoteGameService):
             print("Connection to server terminated")
             break
-    
+
 # print_game_state(game_service.get_game_state(None))
 
 # for r in game_service.game.get_game_results():
 #     print(r["Name"] + " " + r["Best hand"][0] + " " + r["Best hand"][1])
-

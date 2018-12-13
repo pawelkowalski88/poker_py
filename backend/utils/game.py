@@ -1,15 +1,11 @@
 from card import Card
 from hand import Hand
-from hand_description import HandDescription
 from player import Player
-from game_results import GameResults
 from game_results_collection import GameResultsCollection
-from collections import Counter
 from itertools import groupby
-from table import Table
-from dealer import Dealer
+from backend.utils.dealer import Dealer
 import available_action_helper
-import random
+
 
 class Game():
 
