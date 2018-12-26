@@ -1,7 +1,7 @@
 # Represents a poker hand (Royal flush, straight flush, etc.)
 from collections import Counter
-from backend.utils.hand_description import HandDescription
-from backend.utils.jsonconvert import JsonConvert
+from utils.hand_description import HandDescription
+from utils.jsonconvert import JsonConvert
 
 
 @JsonConvert.register

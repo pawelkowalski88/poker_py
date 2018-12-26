@@ -1,6 +1,6 @@
-from backend.utils.game import Game
-from backend.utils.game_state import GameState
-from backend.utils import command
+from utils.game import Game
+from utils.game_state import GameState
+from utils import command
 
 
 class GameServiceLocal:
@@ -19,7 +19,7 @@ class GameServiceLocal:
         self.my_player = None
 
     def setup_api(self):
-        import backend.utils.game_server as game_server
+        import utils.game_server as game_server
         game_server.game_service = self
 
     # def perform_action(self, action_name, action_params):

@@ -1,12 +1,12 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
-from backend.utils.game_service import GameServiceLocal
+from utils.game_service import GameServiceLocal
 import threading
 import time
 import atexit
 import logging
-from backend.utils.jsonconvert import JsonConvert
+from utils.jsonconvert import JsonConvert
 
 game_service: GameServiceLocal = None
 app = Flask(__name__)

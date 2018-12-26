@@ -1,5 +1,5 @@
 import unittest
-from backend.utils.game import Game
+from utils.game import Game
 
 
 class TestClass(unittest.TestCase):

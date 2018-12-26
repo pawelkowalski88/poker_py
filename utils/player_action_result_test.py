@@ -1,6 +1,6 @@
 import unittest
-from backend.utils.game import Game
-from backend.utils.player import Player
+from utils.game import Game
+from utils.player import Player
 
 
 # game_service = GameService()

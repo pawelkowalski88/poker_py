@@ -1,6 +1,6 @@
 # Player class
-from backend.utils.hand import Hand
-from backend.utils.jsonconvert import JsonConvert
+from utils.hand import Hand
+from utils.jsonconvert import JsonConvert
 
 
 @JsonConvert.register

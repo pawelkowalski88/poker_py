@@ -1,10 +1,10 @@
 from itertools import groupby
-from backend.utils.card import Card
-from backend.utils.hand import Hand
-from backend.utils.player import Player
-from backend.utils.game_results_collection import GameResultsCollection
-from backend.utils.dealer import Dealer
-import backend.utils.available_action_helper as available_action_helper
+from utils.card import Card
+from utils.hand import Hand
+from utils.player import Player
+from utils.game_results_collection import GameResultsCollection
+from utils.dealer import Dealer
+import utils.available_action_helper as available_action_helper
 
 
 class Game():

@@ -1,4 +1,4 @@
-from backend.utils.jsonconvert import JsonConvert
+from utils.jsonconvert import JsonConvert
 
 
 def check_available(players, current_player, my_player):

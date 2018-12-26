@@ -1,6 +1,6 @@
 import requests
-from backend.utils.jsonconvert import JsonConvert
-from backend.utils.dummy import Dummy
+from utils.jsonconvert import JsonConvert
+from utils.dummy import Dummy
 
 
 class RemoteGameService:

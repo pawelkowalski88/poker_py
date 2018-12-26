@@ -1,6 +1,6 @@
 import unittest
-from backend.utils.available_action_helper import check_available, fold_available, call_available, bet_available, all_in_available
-from backend.utils.player import Player
+from utils.available_action_helper import check_available, fold_available, call_available, bet_available, all_in_available
+from utils.player import Player
 
 
 class TestClass(unittest.TestCase):

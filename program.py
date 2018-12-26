@@ -1,9 +1,9 @@
 import os
 import time
 import threading
-from backend.utils.remote_game_service import RemoteGameService
-from backend.utils.game_service import GameServiceLocal
-from backend.utils.game_state import GameState
+from utils.remote_game_service import RemoteGameService
+from utils.game_service import GameServiceLocal
+from utils.game_state import GameState
 
 game_state = None
 stop_refreshing = False

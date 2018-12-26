@@ -1,5 +1,5 @@
-from backend.utils.card import card_to_int
-from backend.utils.jsonconvert import JsonConvert
+from utils.card import card_to_int
+from utils.jsonconvert import JsonConvert
 
 hand_ranking = {
     "High card": 1,

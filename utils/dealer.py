@@ -1,6 +1,6 @@
 import random
-from backend.utils.card import Card
-from backend.utils.hand import Hand
+from utils.card import Card
+from utils.hand import Hand
 
 
 class Dealer():

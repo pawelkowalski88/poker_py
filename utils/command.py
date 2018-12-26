@@ -1,4 +1,4 @@
-from backend.utils.available_action_helper import PlayerAction
+from utils.available_action_helper import PlayerAction
 
 class CommandParser():
 
