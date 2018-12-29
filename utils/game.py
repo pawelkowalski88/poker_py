@@ -7,7 +7,7 @@ from utils.dealer import Dealer
 import utils.available_action_helper as available_action_helper
 
 
-class Game():
+class Game:
 
     def __init__(self):
         self.table = []

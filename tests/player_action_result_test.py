@@ -43,6 +43,6 @@ class TestPlayerActions(unittest.TestCase):
         game.player_action({'Action name': 'Bet', 'Amount':200})
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
     unittest.main()
 

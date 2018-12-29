@@ -7,4 +7,7 @@ class Table:
     """
 
     def __init__(self):
+        """Initializes a new instance of the Table class.
+
+        """
         self.cards = []

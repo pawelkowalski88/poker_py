@@ -1,6 +1,10 @@
 import json
 
+
 class JsonConvert(object):
+    """A class that converts objects to JSON. Taken from the internet. To be replaced by something better!
+
+    """
     mappings = {}
 
     @classmethod

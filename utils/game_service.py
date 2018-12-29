@@ -44,7 +44,7 @@ class GameServiceLocal:
 
     def player_action(self, cmd, player):
         command_parser = command.CommandParser(self.game.get_current_available_actions(player))
-        return command_parser.parse_and_exetute(cmd, self.game.player_action, player)
+        return command_parser.parse_and_execute(cmd, self.game.player_action, player)
 
     def get_game_results(self):
         result = self.game.game_results_rich
