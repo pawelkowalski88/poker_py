@@ -7,14 +7,14 @@ class GameServiceLocal:
 
     def __init__(self):
         self.game = Game()
-        self.game_actions={
-        "Add player": self.add_player,
-        "Get players": self.get_players,
-        "Get player": self.get_player,
-        "Start game": self.start_game,
-        "Player action": self.player_action,
-        "Get state": self.get_game_state
-        }
+        # self.game_actions={
+        # "Add player": self.add_player,
+        # "Get players": self.get_players,
+        # "Get player": self.get_player,
+        # "Start game": self.start_game,
+        # "Player action": self.player_action,
+        # "Get state": self.get_game_state
+        # }
         self.game_state = None
         self.my_player = None
 
@@ -22,9 +22,6 @@ class GameServiceLocal:
         import utils.game_server as game_server
         game_server.game_service = self
 
-    # def perform_action(self, action_name, action_params):
-    #     return self.game_actions[action_name](action_params)
-        
     def get_players(self, params):
         return self.game.players
 

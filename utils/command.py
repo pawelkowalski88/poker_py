@@ -3,6 +3,7 @@ from utils.available_action_helper import PlayerAction
 """Defines actions that may be taken by the player. Contains display name, letter code and information 
 if the action takes parameters.
 """
+"""
 player_actions = [
     PlayerAction("Check", "C", False),
     PlayerAction("Fold", "F", False),
@@ -11,7 +12,7 @@ player_actions = [
     PlayerAction("Call", "C", True),
     PlayerAction("All in", "A", False),
     PlayerAction("Confirm ready", "Y", False)
-]
+]"""
 
 
 class CommandParser:
