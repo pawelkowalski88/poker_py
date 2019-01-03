@@ -16,8 +16,8 @@ class Game:
         self.dealer = Dealer(self.table)
         self.finished = False
         self.current_player = None
-        self.round_no = 0
         self.game_results = []
+        self.round_no = 0
         self.game_results_rich = GameResultsCollection()
         self.small_blind = 5
         self.big_blind = 10
