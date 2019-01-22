@@ -32,8 +32,10 @@ class JsonConvert(object):
  
     @classmethod
     def ToJSON(clsself, obj):
+        if isinstance(obj, dict):
+            return json.dumps(obj, default=clsself.complex_handler, indent=4)
         return json.dumps(obj.__dict__, default=clsself.complex_handler, indent=4)
- 
+
     @classmethod
     def FromJSON(clsself, json_str):
         return json.loads(json_str, object_hook=clsself.class_mapper)

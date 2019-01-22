@@ -14,7 +14,7 @@ class RemoteGameService:
         return JsonConvert.FromJSON(result)
 
     def get_game_state(self, player):
-        request = requests.post(self.base_url + '/game_state', json=player)
+        request = requests.get(self.base_url + '/game_state/player')
         data = request.text
         # result = json.loads(data, object_hook=lambda d: namedtuple('X', self.extract_fields(d.keys()))(*d.values()))
         result = JsonConvert.FromJSON(data)

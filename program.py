@@ -129,7 +129,7 @@ def refresh_game_state():
     while True:
         if not stop_refreshing:
             game_state_old = game_state
-            game_state = game_service.get_game_state({"player": my_player.name})
+            game_state = game_service.get_game_state(my_player.name)
             if game_state_old.hash_value != game_state.hash_value:
                 if game_state.state == "Waiting":
                     print_ready_players_and_results(game_state)
@@ -147,38 +147,49 @@ def refresh_game_state():
         time.sleep(0.5)
 
 
-while True:
-    clear_screen()
-    game_mode = input("Host - H, Join - J, Exit - E:")
-    if game_mode.lower() == "h":
-        game_service = GameServiceLocal()
-        game_service.setup_api()
-        break
-    elif game_mode.lower() == "j":
-        game_service = RemoteGameService("http://localhost:5000")
-        break
-    elif game_mode.lower() == "e":
-        os._exit(1)
-game_state = GameState.empty_game_state()
+game_service = GameServiceLocal()
+game_service.setup_api()
 
-my_player_name = input("Please enter your name:")
-my_player = game_service.add_player(my_player_name)
+print("Type exit to stop")
+input_result = input(">")
+while (input_result != "exit"):
+    print("Type exit to stop")
+    input_result = input(">")
 
-thread_counter = 0
-input_thread = threading.Thread(target=refresh_game_state)
-input_thread.daemon = True
-input_thread.start()
-time.sleep(0.1)
 
-# while not game_service.game.finished:
 
-while True:
-    refresh_player_command()
-    if game_state.state == "Finished":
-        stop_refreshing = True
-        if isinstance(game_service, RemoteGameService):
-            print("Connection to server terminated")
-            break
+# while True:
+#     clear_screen()
+#     game_mode = input("Host - H, Join - J, Exit - E:")
+#     if game_mode.lower() == "h":
+#         game_service = GameServiceLocal()
+#         game_service.setup_api()
+#         break
+#     elif game_mode.lower() == "j":
+#         game_service = RemoteGameService("http://localhost:5000")
+#         break
+#     elif game_mode.lower() == "e":
+#         os._exit(1)
+# game_state = GameState.empty_game_state()
+#
+# my_player_name = input("Please enter your name:")
+# my_player = game_service.add_player(my_player_name)
+#
+# thread_counter = 0
+# input_thread = threading.Thread(target=refresh_game_state)
+# input_thread.daemon = True
+# input_thread.start()
+# time.sleep(0.1)
+#
+# # while not game_service.game.finished:
+#
+# while True:
+#     refresh_player_command()
+#     if game_state.state == "Finished":
+#         stop_refreshing = True
+#         if isinstance(game_service, RemoteGameService):
+#             print("Connection to server terminated")
+#             break
 
 # print_game_state(game_service.get_game_state(None))
 

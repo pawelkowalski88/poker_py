@@ -28,45 +28,45 @@ def index():
     return "Python poker game."
 
 
-@app.route('/game_state', methods=['POST'])
-def get_game_state():
-    content = request.get_json()
-    game_state = game_service.get_game_state(content)
-    # return_game_state={
-    #     "Table": list(map(lambda c: dict(c), game_state.table)),
-    #     "Players": list(map(lambda p: dict(p), game_state.players)),
-    #     "Current player": game_state.current_player,
-    #     "Available actions": list(map(lambda a: dict(a), game_state.available_actions)),
-    #     "Round no": game_state.round_no,
-    #     "Pot": game_state.pot,
-    #     "Game results": game_state.game_results
-    # }
+@app.route('/api/game/<player_name>')
+def get_game(player_name):
+    game_state = game_service.get_game_state(player_name)
     result = JsonConvert.ToJSON(game_state)
     return result
-    # return jsonify(return_game_state)
 
 
-@app.route('/player_action', methods=['POST'])
+@app.route('/api/game', methods=['POST'])
 def post_player_action():
     content = request.get_json()
-    # print(content["Action name"])
-    # print(content["Action params"])
     result = game_service.player_action(content["Action params"], content["Player"])
     return jsonify(result)
 
 
-@app.route('/set_player_ready', methods=['POST'])
-def set_player_ready():
-    content = request.get_json()
-    result = game_service.set_player_ready(content['Name'])
-    return jsonify(result)
+@app.route('/api/tables')
+def get_tables():
+    tables = []
+    tables.append({"Name": "test table"})
+    return jsonify(tables)
 
 
-@app.route('/add_player', methods=['POST'])
-def add_player():
-    content = request.get_json()
-    result = game_service.add_player(content['Name'])
-    return JsonConvert.ToJSON(result)
+@app.route('/api/tables/<table_id>')
+def get_table(table_id):
+    return JsonConvert.ToJSON({"Name": "test table", "Players": game_service.get_players(None)})
+
+
+
+# @app.route('/set_player_ready', methods=['POST'])
+# def set_player_ready():
+#     content = request.get_json()
+#     result = game_service.set_player_ready(content['Name'])
+#     return jsonify(result)
+#
+#
+# @app.route('/add_player', methods=['POST'])
+# def add_player():
+#     content = request.get_json()
+#     result = game_service.add_player(content['Name'])
+#     return JsonConvert.ToJSON(result)
 
 
 atexit.register(stop_server)

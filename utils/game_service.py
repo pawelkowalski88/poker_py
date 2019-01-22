@@ -15,8 +15,11 @@ class GameServiceLocal:
         # "Player action": self.player_action,
         # "Get state": self.get_game_state
         # }
+        self.game.add_player("Pawel")
+        self.game.add_player("Zenek")
         self.game_state = None
         self.my_player = None
+        print("Game instance created.")
 
     def setup_api(self):
         import utils.game_server as game_server
@@ -50,13 +53,14 @@ class GameServiceLocal:
     def get_available_actions(self, player):
         return self.game.get_current_available_actions(player)
 
-    def get_game_state(self, params):
+    def get_game_state(self, player):
         if self.game.current_player:
             current_player_name = self.game.current_player.name
         else:
             current_player_name = ""
 
-        my_player = params["player"]
+        my_player = player
+
 
         if self.game.started:
             self.game_state = GameState(
