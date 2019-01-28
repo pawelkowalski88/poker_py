@@ -7,14 +7,6 @@ class GameServiceLocal:
 
     def __init__(self):
         self.game = Game()
-        # self.game_actions={
-        # "Add player": self.add_player,
-        # "Get players": self.get_players,
-        # "Get player": self.get_player,
-        # "Start game": self.start_game,
-        # "Player action": self.player_action,
-        # "Get state": self.get_game_state
-        # }
         self.game.add_player("Pawel")
         self.game.add_player("Zenek")
         self.game_state = None
@@ -33,14 +25,14 @@ class GameServiceLocal:
         self.my_player = self.game.add_player(params)
         return self.my_player
 
-    def start_game(self, params):
-        self.game.initialize_round()
+    # def start_game(self, params):
+    #     self.game.initialize_round()
 
-    def get_player(self, params):
-        self.game.get_player(params["player name"])
+    # def get_player(self, params):
+    #     self.game.get_player(params["player name"])
 
-    def set_player_ready(self, params):
-        return self.game.set_player_ready(params)
+    # def set_player_ready(self, params):
+    #     return self.game.set_player_ready(params)
 
     def player_action(self, cmd, player):
         command_parser = command.CommandParser(self.game.get_current_available_actions(player))
@@ -50,25 +42,26 @@ class GameServiceLocal:
         result = self.game.game_results_rich
         return result
 
-    def get_available_actions(self, player):
-        return self.game.get_current_available_actions(player)
+    # def get_available_actions(self, player):
+    #     return self.game.get_current_available_actions(player)
 
     def get_game_state(self, player):
+
+        if len(list(filter(lambda p: p.name == player, self.game.players))) == 0:
+            return {'result': 'ERROR', 'error_message': 'This player does not exist.'}
+
         if self.game.current_player:
             current_player_name = self.game.current_player.name
         else:
             current_player_name = ""
 
-        my_player = player
-
-
         if self.game.started:
             self.game_state = GameState(
                 "Started",
                 self.game.table,
-                self.game.get_players(my_player),
+                self.game.get_players(player),
                 current_player_name,
-                self.game.get_current_available_actions(my_player),
+                self.game.get_current_available_actions(player),
                 self.game.round_no,
                 self.game.pot,
                 None
@@ -79,7 +72,7 @@ class GameServiceLocal:
                 table = self.game.table,
                 players = self.game.players,
                 current_player = current_player_name,
-                available_actions = self.game.get_current_available_actions(my_player),
+                available_actions = self.game.get_current_available_actions(player),
                 round_no = self.game.round_no,
                 pot = self.game.pot,
                 game_results = self.get_game_results()
@@ -96,4 +89,6 @@ class GameServiceLocal:
                 game_results = self.get_game_results()
             )
 
-        return self.game_state
+        #return self.game_state
+
+        return {'result': 'OK', 'payload': self.game_state}

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request
-from flask import jsonify
+from flask import jsonify, abort, make_response
 from utils.game_service import GameServiceLocal
 import threading
 import time
@@ -31,15 +31,22 @@ def index():
 @app.route('/api/game/<player_name>')
 def get_game(player_name):
     game_state = game_service.get_game_state(player_name)
-    result = JsonConvert.ToJSON(game_state)
-    return result
+    if game_state['result'] == 'OK':
+        return JsonConvert.ToJSON(game_state["payload"])
+    else:
+        abort(make_response(jsonify(game_state), 404))
 
 
 @app.route('/api/game', methods=['POST'])
 def post_player_action():
     content = request.get_json()
     result = game_service.player_action(content["Action params"], content["Player"])
-    return jsonify(result)
+
+    if result['result'] == 'OK':
+        return JsonConvert.ToJSON(result)
+    else:
+        abort(make_response(jsonify(result), 400))
+    # return jsonify(result)
 
 
 @app.route('/api/tables')
@@ -52,6 +59,18 @@ def get_tables():
 @app.route('/api/tables/<table_id>')
 def get_table(table_id):
     return JsonConvert.ToJSON({"Name": "test table", "Players": game_service.get_players(None)})
+
+
+@app.route('/api/tables/<table_id>', methods=['POST'])
+def add_player_to_table(table_id):
+    content = request.get_json()
+    result = game_service.add_player(content["Name"])
+    return JsonConvert.ToJSON(result)
+
+
+@app.errorhandler(404)
+def handle_bad_request(e):
+    return jsonify(e), 404
 
 
 

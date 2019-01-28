@@ -25,9 +25,9 @@ class Game:
         self.max_bet = 0
         self.started = False
         self.round_finished = False
-        self.no_playing = 0
         self.no_starting = 0
         self.initialization = False
+        self.no_playing = 0
 
 
     def player_action(self, params):
@@ -94,6 +94,9 @@ class Game:
 
     def get_current_available_actions(self, my_player):
         if self.current_player or my_player:
+            if self.current_player and my_player:
+                if not self.current_player.name == my_player:
+                    return None
             my_player = self.get_player(my_player)
             if my_player:
                 result = available_action_helper.get_available_actions(self.players, self.current_player, my_player)
@@ -212,7 +215,6 @@ class Game:
     def create_results_ranking(self, players_tab):
         for p in players_tab:
             p.find_hands()
-
 
     def add_player(self, name):
         player = Player(name)
