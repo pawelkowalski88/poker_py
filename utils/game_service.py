@@ -6,11 +6,11 @@ from utils import command
 class GameServiceLocal:
 
     def __init__(self):
-        self.game = Game()
-        self.game.add_player("Pawel")
-        self.game.add_player("Zenek")
-        self.game_state = None
-        self.my_player = None
+        self.__game = Game()
+        self.__game.add_player("Pawel")
+        self.__game.add_player("Zenek")
+        self.__game_state = None
+        self.__my_player = None
         print("Game instance created.")
 
     def setup_api(self):
@@ -18,64 +18,64 @@ class GameServiceLocal:
         game_server.game_service = self
 
     def get_players(self, params):
-        return self.game.players
+        return self.__game.players
 
     def add_player(self, params):
-        if params in list(map(lambda p: p.name, self.game.players)):
+        if params in list(map(lambda p: p.name, self.__game.players)):
             return {'result': 'ERROR', 'error_message': 'A player of the same name already exists.'}
 
-        self.my_player = self.game.add_player(params)
-        return {'result': 'OK', 'payload': self.my_player}
+        self.__my_player = self.__game.add_player(params)
+        return {'result': 'OK', 'payload': self.__my_player}
 
     def player_action(self, cmd, player):
-        command_parser = command.CommandParser(self.game.get_current_available_actions(player))
-        return command_parser.parse_and_execute(cmd, self.game.player_action, player)
+        command_parser = command.CommandParser(self.__game.get_current_available_actions(player))
+        return command_parser.parse_and_execute(cmd, self.__game.player_action, player)
 
     def get_game_results(self):
-        result = self.game.game_results_rich
+        result = self.__game.game_results_rich
         return result
 
     def get_game_state(self, player):
-        if len(list(filter(lambda p: p.name == player, self.game.players))) == 0:
+        if len(list(filter(lambda p: p.name == player, self.__game.players))) == 0:
             return {'result': 'ERROR', 'error_message': 'This player does not exist.'}
 
-        if self.game.current_player:
-            current_player_name = self.game.current_player.name
+        if self.__game.current_player:
+            current_player_name = self.__game.current_player.name
         else:
             current_player_name = ""
 
-        if self.game.started:
-            self.game_state = GameState(
+        if self.__game.started:
+            self.__game_state = GameState(
                 "Started",
-                self.game.table,
-                self.game.get_players(player),
+                self.__game.table,
+                self.__game.get_players(player),
                 current_player_name,
-                self.game.get_current_available_actions(player),
-                self.game.round_no,
-                self.game.pot,
+                self.__game.get_current_available_actions(player),
+                self.__game.round_no,
+                self.__game.pot,
                 None
             )
-        elif not self.game.finished:
-            self.game_state = GameState(
+        elif not self.__game.finished:
+            self.__game_state = GameState(
                 state="Waiting",
-                table=self.game.table,
-                players=self.game.players,
+                table=self.__game.table,
+                players=self.__game.players,
                 current_player=current_player_name,
-                available_actions=self.game.get_current_available_actions(player),
-                round_no=self.game.round_no,
-                pot=self.game.pot,
+                available_actions=self.__game.get_current_available_actions(player),
+                round_no=self.__game.round_no,
+                pot=self.__game.pot,
                 game_results=self.get_game_results()
             )
         else:
-            self.game_state = GameState(
+            self.__game_state = GameState(
                 state="Finished",
-                table=self.game.table,
-                players=self.game.players,
+                table=self.__game.table,
+                players=self.__game.players,
                 current_player=current_player_name,
                 available_actions=[],
-                round_no=self.game.round_no,
-                pot=self.game.pot,
+                round_no=self.__game.round_no,
+                pot=self.__game.pot,
                 game_results=self.get_game_results()
             )
 
-        return {'result': 'OK', 'payload': self.game_state}
+        return {'result': 'OK', 'payload': self.__game_state}

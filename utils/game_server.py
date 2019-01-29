@@ -75,19 +75,6 @@ def add_player_to_table(table_id):
     else:
         abort(make_response(jsonify(result), 400))
 
-# @app.route('/set_player_ready', methods=['POST'])
-# def set_player_ready():
-#     content = request.get_json()
-#     result = game_service.set_player_ready(content['Name'])
-#     return jsonify(result)
-#
-#
-# @app.route('/add_player', methods=['POST'])
-# def add_player():
-#     content = request.get_json()
-#     result = game_service.add_player(content['Name'])
-#     return JsonConvert.ToJSON(result)
-
 
 atexit.register(stop_server)
 server_thread = threading.Thread(target=start_server)
