@@ -46,7 +46,6 @@ def post_player_action():
         return JsonConvert.ToJSON(result)
     else:
         abort(make_response(jsonify(result), 400))
-    # return jsonify(result)
 
 
 @app.route('/api/tables')
@@ -56,23 +55,25 @@ def get_tables():
     return jsonify(tables)
 
 
-@app.route('/api/tables/<table_id>')
+@app.route('/api/tables/<int:table_id>')
 def get_table(table_id):
-    return JsonConvert.ToJSON({"Name": "test table", "Players": game_service.get_players(None)})
+    print(table_id)
+    if table_id == 1:
+        return JsonConvert.ToJSON({"Name": "test table", "Players": game_service.get_players(None)})
+    else:
+        error = {'result': 'ERROR', 'error_message': 'This table does not exist.'}
+        abort(make_response(jsonify(error), 404))
 
 
 @app.route('/api/tables/<table_id>', methods=['POST'])
 def add_player_to_table(table_id):
     content = request.get_json()
     result = game_service.add_player(content["Name"])
-    return JsonConvert.ToJSON(result)
 
-
-@app.errorhandler(404)
-def handle_bad_request(e):
-    return jsonify(e), 404
-
-
+    if result['result'] == 'OK':
+        return JsonConvert.ToJSON(result)
+    else:
+        abort(make_response(jsonify(result), 400))
 
 # @app.route('/set_player_ready', methods=['POST'])
 # def set_player_ready():

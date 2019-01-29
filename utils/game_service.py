@@ -21,18 +21,11 @@ class GameServiceLocal:
         return self.game.players
 
     def add_player(self, params):
-        # self.game.add_player(params["player name"])
+        if params in list(map(lambda p: p.name, self.game.players)):
+            return {'result': 'ERROR', 'error_message': 'A player of the same name already exists.'}
+
         self.my_player = self.game.add_player(params)
-        return self.my_player
-
-    # def start_game(self, params):
-    #     self.game.initialize_round()
-
-    # def get_player(self, params):
-    #     self.game.get_player(params["player name"])
-
-    # def set_player_ready(self, params):
-    #     return self.game.set_player_ready(params)
+        return {'result': 'OK', 'payload': self.my_player}
 
     def player_action(self, cmd, player):
         command_parser = command.CommandParser(self.game.get_current_available_actions(player))
@@ -42,11 +35,7 @@ class GameServiceLocal:
         result = self.game.game_results_rich
         return result
 
-    # def get_available_actions(self, player):
-    #     return self.game.get_current_available_actions(player)
-
     def get_game_state(self, player):
-
         if len(list(filter(lambda p: p.name == player, self.game.players))) == 0:
             return {'result': 'ERROR', 'error_message': 'This player does not exist.'}
 
@@ -68,27 +57,25 @@ class GameServiceLocal:
             )
         elif not self.game.finished:
             self.game_state = GameState(
-                state = "Waiting",
-                table = self.game.table,
-                players = self.game.players,
-                current_player = current_player_name,
-                available_actions = self.game.get_current_available_actions(player),
-                round_no = self.game.round_no,
-                pot = self.game.pot,
-                game_results = self.get_game_results()
+                state="Waiting",
+                table=self.game.table,
+                players=self.game.players,
+                current_player=current_player_name,
+                available_actions=self.game.get_current_available_actions(player),
+                round_no=self.game.round_no,
+                pot=self.game.pot,
+                game_results=self.get_game_results()
             )
         else:
             self.game_state = GameState(
-                state = "Finished",
-                table = self.game.table,
-                players = self.game.players,
-                current_player = current_player_name,
-                available_actions = [],
-                round_no = self.game.round_no,
-                pot = self.game.pot,
-                game_results = self.get_game_results()
+                state="Finished",
+                table=self.game.table,
+                players=self.game.players,
+                current_player=current_player_name,
+                available_actions=[],
+                round_no=self.game.round_no,
+                pot=self.game.pot,
+                game_results=self.get_game_results()
             )
-
-        #return self.game_state
 
         return {'result': 'OK', 'payload': self.game_state}
